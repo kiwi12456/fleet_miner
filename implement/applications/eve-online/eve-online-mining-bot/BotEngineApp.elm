@@ -720,11 +720,9 @@ warpToMiningSite : ReadingFromGameClient -> DecisionPathNode
 warpToMiningSite readingFromGameClient =
     readingFromGameClient
         |> useContextMenuCascadeOnListSurroundingsButton
-            (useMenuEntryWithTextContaining "asteroid belts"
+            (useMenuEntryWithTextContaining "location"
                 (useRandomMenuEntry
-                    (useMenuEntryWithTextContaining "Warp to Within"
-                        (useMenuEntryWithTextContaining "Within 0 m" menuCascadeCompleted)
-                    )
+                    (useMenuEntryWithTextContaining "Warp to Location Within 0 m" menuCascadeCompleted)
                 )
             )
 
