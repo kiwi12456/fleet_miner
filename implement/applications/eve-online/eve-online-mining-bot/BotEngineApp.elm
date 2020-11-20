@@ -248,7 +248,7 @@ returnDronesAndRunAwayIfHitpointsAreTooLow context shipUI =
         runAwayWithDescription =
             describeBranch
                 ("Shield hitpoints are at " ++ (shipUI.hitpointsPercent.shield |> String.fromInt) ++ "%. Run away.")
-                (runAway context)
+                (dockToUnloadOre context)
     in
     if shipUI.hitpointsPercent.shield < context.eventContext.appSettings.runAwayShieldHitpointsThresholdPercent then
         Just runAwayWithDescription
