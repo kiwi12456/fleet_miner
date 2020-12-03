@@ -780,7 +780,7 @@ launchDrones readingFromGameClient =
                                 (describeBranch "Launch drones"
                                     (useContextMenuCascade
                                         ( "drones group", droneGroupInBay.header.uiNode )
-                                        (useMenuEntryWithTextContaining "Launch drone" menuCascadeCompleted)
+                                        (useMenuEntryWithTextContaining "Launch drones" menuCascadeCompleted)
                                         readingFromGameClient
                                     )
                                 )
@@ -826,7 +826,7 @@ launchDronesAndSendThemToMine readingFromGameClient =
                                 (describeBranch "Launch drones"
                                     (useContextMenuCascade
                                         ( "drones group", droneGroupInBay.header.uiNode )
-                                        (useMenuEntryWithTextContaining "Launch drone" menuCascadeCompleted)
+                                        (useMenuEntryWithTextContaining "Launch drones" menuCascadeCompleted)
                                         readingFromGameClient
                                     )
                                 )
