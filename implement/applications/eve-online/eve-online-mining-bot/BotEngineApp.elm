@@ -453,7 +453,7 @@ unlockTargetsNotForMining context =
 
 
 travelToMiningSiteAndLaunchDronesAndTargetAsteroid : BotDecisionContext -> DecisionPathNode
-travelToMiningSiteAndLaunchDronesAndTargetAsteroid context =
+travelToMiningSiteAndLaunchDronesAndTargetAsteroid context seeUndockingComplete =
     if seeUndockingComplete.shipUI.offensiveBuffButtonNames |> List.member "Jammed" then
         describeBranch "I see we are jammed. Warp to another site."
             (warpToMiningSite context.readingFromGameClient)
