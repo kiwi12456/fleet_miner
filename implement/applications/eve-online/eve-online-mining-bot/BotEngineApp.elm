@@ -454,29 +454,33 @@ unlockTargetsNotForMining context =
 
 travelToMiningSiteAndLaunchDronesAndTargetAsteroid : BotDecisionContext -> DecisionPathNode
 travelToMiningSiteAndLaunchDronesAndTargetAsteroid context =
-    case context.readingFromGameClient |> topmostAsteroidFromOverviewWindow of
-        Nothing ->
-            describeBranch "I see no asteroid in the overview. Warp to mining site."
-                (returnDronesToBay context.readingFromGameClient
-                    |> Maybe.withDefault
-                        (warpToMiningSite context.readingFromGameClient)
-                )
+    if seeUndockingComplete.shipUI.offensiveBuffButtonNames |> List.member "electronic" then
+        describeBranch "I see we are jammed. Warp to another site."
+            (warpToMiningSite context.readingFromGameClient)
+    else
+        case context.readingFromGameClient |> topmostAsteroidFromOverviewWindow of
+            Nothing ->
+                describeBranch "I see no asteroid in the overview. Warp to mining site."
+                    (returnDronesToBay context.readingFromGameClient
+                        |> Maybe.withDefault
+                            (warpToMiningSite context.readingFromGameClient)
+                    )
 
-        Just asteroidInOverview ->
-            describeBranch ("Choosing asteroid '" ++ (asteroidInOverview.objectName |> Maybe.withDefault "Nothing") ++ "'")
-                (warpToOverviewEntryIfFarEnough context asteroidInOverview
-                    |> Maybe.withDefault
-                        (launchDrones context.readingFromGameClient
-                            |> Maybe.withDefault
-                                (lockTargetFromOverviewEntryAndEnsureIsInRange
-                                    context.readingFromGameClient
-                                    (min context.eventContext.appSettings.targetingRange
-                                        context.eventContext.appSettings.miningModuleRange
+            Just asteroidInOverview ->
+                describeBranch ("Choosing asteroid '" ++ (asteroidInOverview.objectName |> Maybe.withDefault "Nothing") ++ "'")
+                    (warpToOverviewEntryIfFarEnough context asteroidInOverview
+                        |> Maybe.withDefault
+                            (launchDrones context.readingFromGameClient
+                                |> Maybe.withDefault
+                                    (lockTargetFromOverviewEntryAndEnsureIsInRange
+                                        context.readingFromGameClient
+                                        (min context.eventContext.appSettings.targetingRange
+                                            context.eventContext.appSettings.miningModuleRange
+                                        )
+                                        asteroidInOverview
                                     )
-                                    asteroidInOverview
-                                )
-                        )
-                )
+                            )
+                    )
 
 
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
