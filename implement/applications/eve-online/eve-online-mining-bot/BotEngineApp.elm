@@ -824,6 +824,14 @@ launchDronesAndSendThemToMine readingFromGameClient =
                                         readingFromGameClient
                                     )
                                 )
+                                |> (describeBranch "Send idling drone(s)"
+                                        (useContextMenuCascade
+                                            ( "drones group", droneGroupInLocalSpace.header.uiNode )
+                                            (useMenuEntryWithTextContaining "Engage Target" menuCascadeCompleted)
+                                            readingFromGameClient
+                                        )
+                                    )
+
 
                         else if 0 < dronesInBayQuantity && dronesInLocalSpaceQuantity < 5 then
                             Just
