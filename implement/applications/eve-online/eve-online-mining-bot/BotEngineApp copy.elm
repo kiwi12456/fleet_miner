@@ -478,6 +478,54 @@ travelToMiningSiteAndLaunchDronesAndTargetAsteroid context =
                         )
                 )
 
+unloadToFleetCommander : BotDecisionContext -> DecisionPathNode
+unloadToFleetCommander context =
+    case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
+        Nothing ->
+            describeBranch "I see no fleet commander in the overview. Dock to station and unload ore."
+                (dockToUnloadOre context)
+
+        Just fleetCommanderInOverview ->
+            describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
+                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                    |> case fleetCommanderInOverview.objectDistanceInMeters of
+                            Ok distanceInMeters ->
+                                if distanceInMeters <= 2000 then
+                                    Just
+                                        (describeBranch "Fleet commander close enough. Opening Fleet Hangar."
+                                            Maybe.withDefault
+                                                (useContextMenuCascadeOnOverviewEntry
+                                                    (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
+                                                    fleetCommanderInOverview
+                                                    context.readingFromGameClient
+                                                )
+                                        )
+                                else
+                                    Nothing
+
+                            Err error ->
+                                Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
+                )
+
+approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
+approachFleetCommanderIfFarEnough context fleetcommanderOverviewEntry =
+    case fleetcommanderOverviewEntry.objectDistanceInMeters of
+        Ok distanceInMeters ->
+            if distanceInMeters <= 2000 then
+                Nothing
+            else
+                Just
+                    (describeBranch "Fleet commander far enough to start approaching."
+                        Maybe.withDefault
+                            (useContextMenuCascadeOnOverviewEntry
+                                (useMenuEntryWithTextContaining "Approach" menuCascadeCompleted)
+                                fleetcommanderOverviewEntry
+                                context.readingFromGameClient
+                            )
+                    )
+
+        Err error ->
+            Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
 
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
