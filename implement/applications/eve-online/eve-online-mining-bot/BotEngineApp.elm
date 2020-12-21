@@ -459,7 +459,7 @@ travelToMiningSiteAndLaunchDronesAndTargetAsteroid context =
             describeBranch "I see no asteroid in the overview. Warp to mining site."
                 (returnDronesToBay context.readingFromGameClient
                     |> Maybe.withDefault
-                        (warpToMiningSite context.readingFromGameClient)
+                        (warpToWatchlistEntry context)
                 )
 
         Just asteroidInOverview ->
@@ -715,6 +715,22 @@ dockToStationOrStructureUsingSurroundingsButtonMenu { prioritizeStructures, desc
             )
         )
 
+warpToWatchlistEntry : BotDecisionContext -> DecisionPathNode
+warpToWatchlistEntry context =
+    case context.readingFromGameClient.watchListPanel |> Maybe.andThen (.entries >> List.head) of
+        Just watchlistEntry ->
+            describeBranch "Warp to entry in watchlist panel."
+                (useContextMenuCascade
+                    ( "Watchlist entry", watchlistEntry )
+                    (useMenuEntryWithTextContaining "Warp to Member Within"
+                        (useMenuEntryWithTextContaining "Within 0 m" menuCascadeCompleted)
+                    )
+                    context.readingFromGameClient
+                )
+
+        Nothing ->
+            describeBranch "I see no entry in the watchlist panel. Warping directly to mining site."
+                (warpToMiningSite context.readingFromGameClient)
 
 warpToMiningSite : ReadingFromGameClient -> DecisionPathNode
 warpToMiningSite readingFromGameClient =
@@ -725,6 +741,7 @@ warpToMiningSite readingFromGameClient =
                     (useMenuEntryWithTextContaining "Warp to Location Within 0 m" menuCascadeCompleted)
                 )
             )
+
 
 
 runAway : BotDecisionContext -> DecisionPathNode
