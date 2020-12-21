@@ -490,10 +490,9 @@ unloadToFleetCommander context =
             describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                     |> Maybe.withDefault
-                        (useContextMenuCascadeOnOverviewEntry
-                            (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
-                            fleetCommanderInOverview
+                        (ensureOreHoldIsSelectedInInventoryWindow
                             context.readingFromGameClient
+                            (dockedWithOreHoldSelected context)
                         )
                 )
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
@@ -521,12 +520,20 @@ warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
         Err error ->
             Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
 
-approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
+
+-- ensureOreHoldIsSelectedInInventoryWindow : ReadingFromGameClient -> (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode) -> DecisionPathNode
+
+approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode) -> DecisionPathNode
 approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
     case fleetCommanderOverviewEntry.objectDistanceInMeters of
         Ok distanceInMeters ->
             if distanceInMeters <= 2000 then
-                Nothing
+                Just
+                    (useContextMenuCascadeOnOverviewEntry
+                        (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
+                        fleetCommanderInOverview
+                        context.readingFromGameClient
+                    )
 
             else
                 Just
