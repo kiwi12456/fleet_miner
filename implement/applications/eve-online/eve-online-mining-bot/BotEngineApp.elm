@@ -489,8 +489,9 @@ unloadToFleetCommander context =
         Just fleetCommanderInOverview ->
             describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
-                    |> Maybe.withDefault
-                        (dockedWithOreHoldSelected context)
+                    |>  ensureOreHoldIsSelectedInInventoryWindow
+                            context.readingFromGameClient
+                            (dockedWithOreHoldSelected context)
                 )
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
@@ -517,7 +518,7 @@ warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
         Err error ->
             Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
 
-approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
+approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode)
 approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
     case fleetCommanderOverviewEntry.objectDistanceInMeters of
         Ok distanceInMeters ->
