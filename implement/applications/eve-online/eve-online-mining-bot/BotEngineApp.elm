@@ -495,8 +495,7 @@ unloadToFleetCommander context =
                             fleetCommanderInOverview
                             context.readingFromGameClient
                         )
-                            |> Maybe.withDefault
-                                (useContextMenuCascadeOnOverviewEntry
+                            |> (useContextMenuCascadeOnOverviewEntry
                                     (useMenuEntryWithTextContaining "Show Info" menuCascadeCompleted)
                                     fleetCommanderInOverview
                                     context.readingFromGameClient
