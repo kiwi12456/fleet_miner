@@ -487,8 +487,11 @@ unloadToFleetCommander context =
                 (dockToUnloadOre context)
 
         Just fleetCommanderInOverview ->
-            describeBranch ("Fleet commander found. Approach and unload to fleet hangar..")
-                (dockToUnloadOre context)
+            describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
+                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                    |> Maybe.withDefault
+                        (dockToUnloadOre context)
+                )
 
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
@@ -515,6 +518,25 @@ warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
         Err error ->
             Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
 
+approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
+approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
+    case fleetCommanderOverviewEntry.objectDistanceInMeters of
+        Ok distanceInMeters ->
+            if distanceInMeters <= 2000 then
+                Nothing
+
+            else
+                Just
+                    (describeBranch "Far enough to start approaching fleet commander."
+                        (useContextMenuCascadeOnOverviewEntry
+                            (useMenuEntryWithTextContaining "Approach" menuCascadeCompleted)
+                            fleetCommanderOverviewEntry
+                            context.readingFromGameClient
+                        )
+                    )
+
+        Err error ->
+            Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
 
 ensureOreHoldIsSelectedInInventoryWindow : ReadingFromGameClient -> (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode) -> DecisionPathNode
 ensureOreHoldIsSelectedInInventoryWindow readingFromGameClient continueWithInventoryWindow =
