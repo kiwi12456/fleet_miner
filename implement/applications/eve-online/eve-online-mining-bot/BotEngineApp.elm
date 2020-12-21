@@ -488,7 +488,7 @@ unloadToFleetCommander context =
         Just fleetCommanderInOverview ->
             describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
-                    |> case fleetcommanderOverviewEntry.objectDistanceInMeters of
+                    |> case fleetCommanderInOverview.objectDistanceInMeters of
                             Ok distanceInMeters ->
                                 if distanceInMeters <= 2000 then
                                     Just
@@ -496,7 +496,7 @@ unloadToFleetCommander context =
                                             Maybe.withDefault
                                                 (useContextMenuCascadeOnOverviewEntry
                                                     (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
-                                                    fleetcommanderOverviewEntry
+                                                    fleetCommanderInOverview
                                                     context.readingFromGameClient
                                                 )
                                         )
