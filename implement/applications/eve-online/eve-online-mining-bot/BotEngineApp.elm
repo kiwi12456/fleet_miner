@@ -490,11 +490,13 @@ unloadToFleetCommander context =
             describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                     |> Maybe.withDefault
-                        (ensureOreHoldIsSelectedInInventoryWindow
+                        (useContextMenuCascadeOnOverviewEntry
+                            (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
+                            fleetCommanderInOverview
                             context.readingFromGameClient
-                            (dockedWithOreHoldSelected context)
                         )
                 )
+
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
     case destinationOverviewEntry.objectDistanceInMeters of
@@ -520,20 +522,12 @@ warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
         Err error ->
             Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
 
-
--- ensureOreHoldIsSelectedInInventoryWindow : ReadingFromGameClient -> (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode) -> DecisionPathNode
-
 approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
     case fleetCommanderOverviewEntry.objectDistanceInMeters of
         Ok distanceInMeters ->
             if distanceInMeters <= 2000 then
-                Just
-                    (useContextMenuCascadeOnOverviewEntry
-                        (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
-                        fleetCommanderOverviewEntry
-                        context.readingFromGameClient
-                    )
+                Nothing
 
             else
                 Just
@@ -1229,10 +1223,6 @@ inventoryWindowWithOreHoldSelectedFromGameClient =
 inventoryWindowSelectedContainerIsOreHold : EveOnline.ParseUserInterface.InventoryWindow -> Bool
 inventoryWindowSelectedContainerIsOreHold =
     .subCaptionLabelText >> Maybe.map (String.toLower >> String.contains "ore hold") >> Maybe.withDefault False
-
--- inventoryWindowSelectedContainerIsOreHold : EveOnline.ParseUserInterface.InventoryWindow -> Bool
--- inventoryWindowSelectedContainerIsOreHold =
---     .subCaptionLabelText >> Maybe.map (String.toLower >> String.contains "ore hold") >> Maybe.withDefault False
 
 
 selectedContainerFirstItemFromInventoryWindow : EveOnline.ParseUserInterface.InventoryWindow -> Maybe UIElement
