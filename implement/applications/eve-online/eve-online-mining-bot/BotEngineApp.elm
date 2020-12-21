@@ -71,7 +71,7 @@ defaultBotSettings =
     , targetingRange = 8000
     , miningModuleRange = 5000
     , botStepDelayMilliseconds = 4000
-    , oreHoldMaxPercent = 99
+    , oreHoldMaxPercent = 20
     , selectInstancePilotName = Nothing
     }
 
@@ -393,7 +393,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                         if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
                             describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
                                 (returnDronesToBay context.readingFromGameClient
-                                    |> Maybe.withDefault (dockToUnloadOre context)
+                                    |> Maybe.withDefault (unloadToFleetCommander context)
                                 )
 
                         else
@@ -478,6 +478,17 @@ travelToMiningSiteAndLaunchDronesAndTargetAsteroid context =
                         )
                 )
 
+
+unloadToFleetCommander : BotDecisionContext -> DecisionPathNode
+unloadToFleetCommander context =
+    case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
+        Nothing ->
+            describeBranch "I see no fleet commander. Dock to unload ore."
+                (dockToUnloadOre context)
+
+        Just fleetCommanderInOverview ->
+            describeBranch ("Fleet commander found. Approach and unload to fleet hangar..")
+                (dockToUnloadOre context)
 
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
@@ -1211,6 +1222,12 @@ itemHangarFromInventoryWindow =
         >> List.head
         >> Maybe.map .uiNode
 
+fleetHangarFromInventoryWindow : EveOnline.ParseUserInterface.InventoryWindow -> Maybe UIElement
+fleetHangarFromInventoryWindow =
+    .leftTreeEntries
+        >> List.filter (.text >> String.toLower >> String.contains "fleet hangar")
+        >> List.head
+        >> Maybe.map .uiNode
 
 {-| The region of a ship entry in the inventory window can contain child nodes (e.g. 'Ore Hold').
 For this reason, we don't click on the center but stay close to the top.
