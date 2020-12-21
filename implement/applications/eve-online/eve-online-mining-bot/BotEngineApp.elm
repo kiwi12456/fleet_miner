@@ -490,7 +490,11 @@ unloadToFleetCommander context =
             describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                     |> Maybe.withDefault
-                        (dockToUnloadOre context)
+                        (useContextMenuCascadeOnOverviewEntry
+                            (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
+                            destinationOverviewEntry
+                            context.readingFromGameClient
+                        )
                 )
 
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
