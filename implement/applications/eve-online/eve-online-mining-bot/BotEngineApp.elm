@@ -495,6 +495,12 @@ unloadToFleetCommander context =
                             fleetCommanderInOverview
                             context.readingFromGameClient
                         )
+                            |> Maybe.withDefault
+                                (useContextMenuCascadeOnOverviewEntry
+                                    (useMenuEntryWithTextContaining "Show Info" menuCascadeCompleted)
+                                    fleetCommanderInOverview
+                                    context.readingFromGameClient
+                                )
                 )
 
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
