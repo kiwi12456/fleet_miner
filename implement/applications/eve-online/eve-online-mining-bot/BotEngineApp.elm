@@ -486,7 +486,7 @@ unloadToFleetCommander context =
                 (dockToUnloadOre context)
 
         Just fleetCommanderInOverview ->
-            describeBranch ("Fleet commander found. Approach and unload to fleet hangar.") ++ "'")
+            describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                     |> case fleetcommanderOverviewEntry.objectDistanceInMeters of
                             Ok distanceInMeters ->
