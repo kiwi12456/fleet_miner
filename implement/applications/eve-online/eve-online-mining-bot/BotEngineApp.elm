@@ -523,7 +523,7 @@ warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
 
 -- ensureOreHoldIsSelectedInInventoryWindow : ReadingFromGameClient -> (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode) -> DecisionPathNode
 
-approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe (EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode) -> DecisionPathNode
+approachFleetCommanderIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
     case fleetCommanderOverviewEntry.objectDistanceInMeters of
         Ok distanceInMeters ->
