@@ -531,7 +531,7 @@ approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
                 Just
                     (useContextMenuCascadeOnOverviewEntry
                         (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
-                        fleetCommanderInOverview
+                        fleetCommanderOverviewEntry
                         context.readingFromGameClient
                     )
 
