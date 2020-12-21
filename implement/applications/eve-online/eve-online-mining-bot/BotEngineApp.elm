@@ -1176,7 +1176,7 @@ overviewWindowEntriesRepresentingFleetCommander =
 
 overviewWindowEntryRepresentsFleetCommander : OverviewWindowEntry -> Bool
 overviewWindowEntryRepresentsFleetCommander entry =
-    (entry.textsLeftToRight |> List.any (String.toLower >> String.contains "tris z"))
+    (entry.textsLeftToRight |> List.any (String.toLower >> String.contains "tris"))
 
 
 capacityGaugeUsedPercent : EveOnline.ParseUserInterface.InventoryWindow -> Maybe Int
