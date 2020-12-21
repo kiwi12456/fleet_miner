@@ -1223,9 +1223,9 @@ inventoryWindowSelectedContainerIsOreHold : EveOnline.ParseUserInterface.Invento
 inventoryWindowSelectedContainerIsOreHold =
     .subCaptionLabelText >> Maybe.map (String.toLower >> String.contains "ore hold") >> Maybe.withDefault False
 
-inventoryWindowSelectedContainerIsOreHold : EveOnline.ParseUserInterface.InventoryWindow -> Bool
-inventoryWindowSelectedContainerIsOreHold =
-    .subCaptionLabelText >> Maybe.map (String.toLower >> String.contains "ore hold") >> Maybe.withDefault False
+-- inventoryWindowSelectedContainerIsOreHold : EveOnline.ParseUserInterface.InventoryWindow -> Bool
+-- inventoryWindowSelectedContainerIsOreHold =
+--     .subCaptionLabelText >> Maybe.map (String.toLower >> String.contains "ore hold") >> Maybe.withDefault False
 
 
 selectedContainerFirstItemFromInventoryWindow : EveOnline.ParseUserInterface.InventoryWindow -> Maybe UIElement
