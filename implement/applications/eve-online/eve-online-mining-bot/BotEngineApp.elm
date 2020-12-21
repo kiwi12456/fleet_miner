@@ -492,7 +492,7 @@ unloadToFleetCommander context =
                     |> Maybe.withDefault
                         (useContextMenuCascadeOnOverviewEntry
                             (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
-                            destinationOverviewEntry
+                            fleetCommanderInOverview
                             context.readingFromGameClient
                         )
                 )
