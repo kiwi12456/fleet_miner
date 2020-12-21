@@ -490,18 +490,8 @@ unloadToFleetCommander context =
             describeBranch ("Fleet commander found. Approach and unload to fleet hangar.")
                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                     |> Maybe.withDefault
-                        (useContextMenuCascadeOnOverviewEntry
-                            (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
-                            fleetCommanderInOverview
-                            context.readingFromGameClient
-                        )
-                            |> (useContextMenuCascadeOnOverviewEntry
-                                    (useMenuEntryWithTextContaining "Show Info" menuCascadeCompleted)
-                                    fleetCommanderInOverview
-                                    context.readingFromGameClient
-                                )
+                        (dockedWithOreHoldSelected context)
                 )
-
 warpToOverviewEntryIfFarEnough : BotDecisionContext -> OverviewWindowEntry -> Maybe DecisionPathNode
 warpToOverviewEntryIfFarEnough context destinationOverviewEntry =
     case destinationOverviewEntry.objectDistanceInMeters of
@@ -532,7 +522,12 @@ approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
     case fleetCommanderOverviewEntry.objectDistanceInMeters of
         Ok distanceInMeters ->
             if distanceInMeters <= 2000 then
-                Nothing
+                Just
+                    (useContextMenuCascadeOnOverviewEntry
+                        (useMenuEntryWithTextContaining "Open Fleet Hangar" menuCascadeCompleted)
+                        fleetCommanderOverviewEntry
+                        context.readingFromGameClient
+                    )
 
             else
                 Just
