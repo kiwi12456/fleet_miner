@@ -615,7 +615,9 @@ approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
                 Just
                     (describeBranch "Far enough to start approaching fleet commander."
                         (useContextMenuCascadeOnOverviewEntry
-                            (useMenuEntryWithTextContaining "Approach" menuCascadeCompleted)
+                            (useMenuEntryWithTextContaining "Orbit" 
+                                (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+                            )
                             fleetCommanderOverviewEntry
                             context.readingFromGameClient
                         )
@@ -686,7 +688,7 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
                     describeBranch "Locking target is in progress, wait for completion." waitForProgressInGame
 
                 else
-                    describeBranch "Object is in range. Lock target."
+                    describeBranch "Object is in range. Lock target."shipManeuverIsApproaching
                         (lockTargetFromOverviewEntry overviewEntry readingFromGameClient)
 
             else
