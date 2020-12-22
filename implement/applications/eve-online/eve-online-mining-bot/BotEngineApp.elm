@@ -71,7 +71,7 @@ defaultBotSettings =
     , targetingRange = 8000
     , miningModuleRange = 5000
     , botStepDelayMilliseconds = 4000
-    , oreHoldMaxPercent = 95
+    , oreHoldMaxPercent = 30
     , selectInstancePilotName = Nothing
     }
 
