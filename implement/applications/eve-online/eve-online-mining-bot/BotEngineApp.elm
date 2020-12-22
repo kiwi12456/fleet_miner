@@ -545,20 +545,29 @@ travelToMiningSiteAndLaunchDronesAndTargetAsteroid context =
                 )
 
         Just asteroidInOverview ->
-            describeBranch ("Choosing asteroid '" ++ (asteroidInOverview.objectName |> Maybe.withDefault "Nothing") ++ "'")
-                (warpToOverviewEntryIfFarEnough context asteroidInOverview
-                    |> Maybe.withDefault
-                        (launchDrones context.readingFromGameClient
+            case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
+                Nothing ->
+                    describeBranch "I see no fleet commander. Warp to fleet commander."
+                        (returnDronesToBay context.readingFromGameClient
                             |> Maybe.withDefault
-                                (lockTargetFromOverviewEntryAndEnsureIsInRange
-                                    context.readingFromGameClient
-                                    (min context.eventContext.appSettings.targetingRange
-                                        context.eventContext.appSettings.miningModuleRange
-                                    )
-                                    asteroidInOverview
+                                (warpToWatchlistEntry context)
+                        )
+
+                Just fleetCommanderInOverview ->
+                    describeBranch ("Choosing asteroid '" ++ (asteroidInOverview.objectName |> Maybe.withDefault "Nothing") ++ "'")
+                        (warpToOverviewEntryIfFarEnough context asteroidInOverview
+                            |> Maybe.withDefault
+                                (launchDrones context.readingFromGameClient
+                                    |> Maybe.withDefault
+                                        (lockTargetFromOverviewEntryAndEnsureIsInRange
+                                            context.readingFromGameClient
+                                            (min context.eventContext.appSettings.targetingRange
+                                                context.eventContext.appSettings.miningModuleRange
+                                            )
+                                            asteroidInOverview
+                                        )
                                 )
                         )
-                )
 
 
 unloadToFleetCommander : BotDecisionContext -> DecisionPathNode
