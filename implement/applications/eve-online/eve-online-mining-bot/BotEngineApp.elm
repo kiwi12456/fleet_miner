@@ -439,21 +439,33 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                 (warpToWatchlistEntry context)
 
                                         Just fleetCommanderInOverview ->
-                                            describeBranch "I see at least one item in the ore hold. Approach fleet commander and move item to the fleet hangar."
-                                                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
-                                                    |> Maybe.withDefault
-                                                        (endDecisionPath
-                                                            (actWithoutFurtherReadings
-                                                                ( "Drag and drop."
-                                                                , EffectOnWindow.effectsForDragAndDrop
-                                                                    { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
-                                                                    , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
-                                                                    , mouseButton = MouseButtonLeft
-                                                                    }
-                                                                )
-                                                            )
+                                            describeBranch "I see at least one item in the ore hold. Move this to the fleet hangar."
+                                                (endDecisionPath
+                                                    (actWithoutFurtherReadings
+                                                        ( "Drag and drop."
+                                                        , EffectOnWindow.effectsForDragAndDrop
+                                                            { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                                            , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                                            , mouseButton = MouseButtonLeft
+                                                            }
                                                         )
+                                                    )
                                                 )
+                                            -- describeBranch "I see at least one item in the ore hold. Approach fleet commander and move item to the fleet hangar."
+                                            --     (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                                            --         |> Maybe.withDefault
+                                            --             (endDecisionPath
+                                            --                 (actWithoutFurtherReadings
+                                            --                     ( "Drag and drop."
+                                            --                     , EffectOnWindow.effectsForDragAndDrop
+                                            --                         { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                            --                         , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                            --                         , mouseButton = MouseButtonLeft
+                                            --                         }
+                                            --                     )
+                                            --                 )
+                                            --             )
+                                            --     )
 
 
                                         
