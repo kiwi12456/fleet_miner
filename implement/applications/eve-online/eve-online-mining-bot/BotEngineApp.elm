@@ -439,7 +439,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                 (warpToWatchlistEntry context)
 
                                         Just fleetCommanderInOverview ->
-                                            describeBranch "I see at least one item in the ore hold. Move this to the fleet hangar."
+                                            describeBranch "I see at least one item in the ore hold. Approach fleet commander and move item to the fleet hangar."
                                                 (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                                                     |> Maybe.withDefault
                                                         (endDecisionPath
