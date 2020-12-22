@@ -433,17 +433,21 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
 
                                     Just itemInInventory ->
                                         describeBranch "I see at least one item in the ore hold. Move this to the fleet hangar."
-                                            (endDecisionPath
-                                                (actWithoutFurtherReadings
-                                                    ( "Drag and drop."
-                                                    , EffectOnWindow.effectsForDragAndDrop
-                                                        { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
-                                                        , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
-                                                        , mouseButton = MouseButtonLeft
-                                                        }
+                                        (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                                            |> Maybe.withDefault
+                                                (endDecisionPath
+                                                    (actWithoutFurtherReadings
+                                                        ( "Drag and drop."
+                                                        , EffectOnWindow.effectsForDragAndDrop
+                                                            { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                                            , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                                            , mouseButton = MouseButtonLeft
+                                                            }
+                                                        )
                                                     )
                                                 )
-                                            )
+                                        )
+                                            
                             Nothing ->
                                 if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
                                     describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
