@@ -688,7 +688,7 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
                     describeBranch "Locking target is in progress, wait for completion." waitForProgressInGame
 
                 else
-                    describeBranch "Object is in range. Lock target."shipManeuverIsApproaching
+                    describeBranch "Object is in range. Lock target."
                         (lockTargetFromOverviewEntry overviewEntry readingFromGameClient)
 
             else
