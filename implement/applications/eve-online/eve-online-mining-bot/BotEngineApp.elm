@@ -432,21 +432,31 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                 )
 
                                     Just itemInInventory ->
-                                        describeBranch "I see at least one item in the ore hold. Move this to the fleet hangar."
-                                        (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
-                                            |> Maybe.withDefault
-                                                (endDecisionPath
-                                                    (actWithoutFurtherReadings
-                                                        ( "Drag and drop."
-                                                        , EffectOnWindow.effectsForDragAndDrop
-                                                            { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
-                                                            , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
-                                                            , mouseButton = MouseButtonLeft
-                                                            }
+
+                                    case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
+                                        Nothing ->
+                                            describeBranch "I see no fleet commander. Warp to fleet commander."
+                                                (warpToWatchlistEntry context)
+
+                                        Just fleetCommanderInOverview ->
+                                            describeBranch "I see at least one item in the ore hold. Move this to the fleet hangar."
+                                                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                                                    |> Maybe.withDefault
+                                                        (endDecisionPath
+                                                            (actWithoutFurtherReadings
+                                                                ( "Drag and drop."
+                                                                , EffectOnWindow.effectsForDragAndDrop
+                                                                    { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                                                    , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                                                    , mouseButton = MouseButtonLeft
+                                                                    }
+                                                                )
+                                                            )
                                                         )
-                                                    )
                                                 )
-                                        )
+
+
+                                        
                                             
                             Nothing ->
                                 if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
