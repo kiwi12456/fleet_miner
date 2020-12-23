@@ -703,7 +703,11 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
             else
                 describeBranch ("Object is not in range (" ++ (distanceInMeters |> String.fromInt) ++ " meters away). Approach.")
                     (if shipManeuverIsApproaching readingFromGameClient then
-                        describeBranch "I see we already approach." waitForProgressInGame
+                        describeBranch "I see we already approach."
+                            useContextMenuCascadeOnOverviewEntry
+                                (useMenuEntryWithTextContaining "approach" menuCascadeCompleted)
+                                overviewEntry
+                                readingFromGameClient
 
                      else
                         useContextMenuCascadeOnOverviewEntry
