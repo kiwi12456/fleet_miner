@@ -694,13 +694,7 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
         Ok distanceInMeters ->
             if distanceInMeters <= rangeInMeters then
                 if overviewEntry.commonIndications.targetedByMe || overviewEntry.commonIndications.targeting then
-                    (endDecisionPath
-                        (actWithoutFurtherReadings
-                            ( "Locking target is in progress, wait for completion."
-                            , overviewEntry.uiNode |> clickOnUIElement MouseButtonLeft
-                            )
-                        )
-                    )
+                    describeBranch "Locking target is in progress, wait for completion." waitForProgressInGame
 
                 else
                     describeBranch "Object is in range. Lock target."
@@ -708,10 +702,14 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
 
             else
                 describeBranch ("Object is not in range (" ++ (distanceInMeters |> String.fromInt) ++ " meters away). Approach.")
-                    (useContextMenuCascadeOnOverviewEntry
-                        (useMenuEntryWithTextContaining "approach" menuCascadeCompleted)
-                        overviewEntry
-                        readingFromGameClient
+                    (if shipManeuverIsApproaching readingFromGameClient then
+                        describeBranch "I see we already approach." waitForProgressInGame
+
+                     else
+                        useContextMenuCascadeOnOverviewEntry
+                            (useMenuEntryWithTextContaining "approach" menuCascadeCompleted)
+                            overviewEntry
+                            readingFromGameClient
                     )
 
         Err error ->
