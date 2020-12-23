@@ -694,13 +694,13 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
         Ok distanceInMeters ->
             if distanceInMeters <= rangeInMeters then
                 if overviewEntry.commonIndications.targetedByMe || overviewEntry.commonIndications.targeting then
-                    describeBranch "Locking target is in progress, wait for completion."
-                        endDecisionPath
-                            (actWithoutFurtherReadings
-                                ( "Click the tree entry representing the target."
-                                , overviewEntry.uiNode |> clickOnUIElement MouseButtonLeft
-                                )
+                    (endDecisionPath
+                        (actWithoutFurtherReadings
+                            ( "Locking target is in progress, wait for completion."
+                            , overviewEntry.uiNode |> clickOnUIElement MouseButtonLeft
                             )
+                        )
+                    )
 
                 else
                     describeBranch "Object is in range. Lock target."
