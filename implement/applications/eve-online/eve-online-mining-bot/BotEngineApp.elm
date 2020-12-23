@@ -694,7 +694,8 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
         Ok distanceInMeters ->
             if distanceInMeters <= rangeInMeters then
                 if overviewEntry.commonIndications.targetedByMe || overviewEntry.commonIndications.targeting then
-                    describeBranch "Locking target is in progress, wait for completion." waitForProgressInGame
+                    describeBranch "Locking target is in progress, wait for completion."
+                        (lockTargetFromOverviewEntry overviewEntry readingFromGameClient)
 
                 else
                     describeBranch "Object is in range. Lock target."
