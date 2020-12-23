@@ -41,7 +41,15 @@ effectsForDragAndDrop : { startLocation : Location2d, mouseButton : MouseButton,
 effectsForDragAndDrop { startLocation, mouseButton, endLocation } =
     [ MouseMoveTo startLocation
     , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyDown (vkey_LCONTROL)
+    , KeyDown (vkey_A)
+    , KeyUp (vkey_LCONTROL)
+    , KeyUp (vkey_A)
+    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
     , MouseMoveTo endLocation
+    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
     , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
     ]
 
