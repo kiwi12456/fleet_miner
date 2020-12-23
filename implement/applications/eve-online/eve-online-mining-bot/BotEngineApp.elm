@@ -697,7 +697,7 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
                     describeBranch "Locking target is in progress, wait for completion."
                         endDecisionPath
                             (actWithoutFurtherReadings
-                                ( "Click the tree entry representing the ore hold."
+                                ( "Click the tree entry representing the target."
                                 , overviewEntry.uiNode |> clickOnUIElement MouseButtonLeft
                                 )
                             )
