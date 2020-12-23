@@ -702,10 +702,11 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
 
             else
                 describeBranch ("Object is not in range (" ++ (distanceInMeters |> String.fromInt) ++ " meters away). Approach.")
-                    useContextMenuCascadeOnOverviewEntry
+                    (useContextMenuCascadeOnOverviewEntry
                         (useMenuEntryWithTextContaining "approach" menuCascadeCompleted)
                         overviewEntry
                         readingFromGameClient
+                    )
 
         Err error ->
             describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck
