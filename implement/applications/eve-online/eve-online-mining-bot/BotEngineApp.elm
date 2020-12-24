@@ -1269,7 +1269,11 @@ topmostAsteroidFromOverviewWindow =
 overviewWindowEntriesRepresentingAsteroids : ReadingFromGameClient -> List OverviewWindowEntry
 overviewWindowEntriesRepresentingAsteroids =
     .overviewWindow
-        >> Maybe.map (.entries >> List.filter overviewWindowEntryRepresentsAnAsteroid)
+        >> Maybe.map .entries
+        >> Maybe.withDefault []
+        >> List.filter overviewWindowEntryRepresentsAnAsteroid
+        >> Maybe.withDefault []
+        >> List.filter iconSpriteHasColorOfAsteroid
         >> Maybe.withDefault []
 
 
@@ -1277,6 +1281,15 @@ overviewWindowEntryRepresentsAnAsteroid : OverviewWindowEntry -> Bool
 overviewWindowEntryRepresentsAnAsteroid entry =
     (entry.textsLeftToRight |> List.any (String.toLower >> String.contains "asteroid"))
         && (entry.textsLeftToRight |> List.any (String.toLower >> String.contains "belt") |> not)
+
+iconSpriteHasColorOfAsteroid : OverviewWindowEntry -> Bool
+iconSpriteHasColorOfAsteroid =
+    .iconSpriteColorPercent
+        >> Maybe.map
+            (\colorPercent ->
+                colorPercent.r = 100 && colorPercent.g = 100 && colorPercent.b = 100
+            )
+        >> Maybe.withDefault False
 
 fleetCommanderFromOverviewWindow : ReadingFromGameClient -> Maybe OverviewWindowEntry
 fleetCommanderFromOverviewWindow =
