@@ -1287,7 +1287,7 @@ iconSpriteHasColorOfAsteroid =
     .iconSpriteColorPercent
         >> Maybe.map
             (\colorPercent ->
-                colorPercent.r = 100 && colorPercent.g = 100 && colorPercent.b = 100
+                colorPercent.r == 100 && colorPercent.g == 100 && colorPercent.b == 100
             )
         >> Maybe.withDefault False
 
