@@ -670,7 +670,19 @@ ensureOreHoldIsSelectedInInventoryWindow readingFromGameClient continueWithInven
         Nothing ->
             case readingFromGameClient.inventoryWindows |> List.head of
                 Nothing ->
-                    describeBranch "I do not see an inventory window. Please open an inventory window." askForHelpToGetUnstuck
+                    describeBranch "I do not see an inventory window. Opening inventory window."
+                        (endDecisionPath
+                            (actWithoutFurtherReadings
+                                ( "Press the 'W' key and click on the overview entry."
+                                , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_LSHIFT ]
+                                , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_C ]
+                                , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_LSHIFT ]
+                                , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_C ]
+                                ]
+                                    |> List.concat
+                                )
+                            )
+                        )
 
                 Just inventoryWindow ->
                     describeBranch
