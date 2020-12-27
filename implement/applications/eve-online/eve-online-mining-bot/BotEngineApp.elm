@@ -468,7 +468,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                                         (useMenuEntryWithTextContaining "Orbit" 
                                                                             (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
                                                                         )
-                                                                        fleetCommanderOverviewEntry
+                                                                        fleetCommanderInOverview
                                                                         context.readingFromGameClient
                                                                     )
                                                                 )
