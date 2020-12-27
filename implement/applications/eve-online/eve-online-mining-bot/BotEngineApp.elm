@@ -451,61 +451,124 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                             )
 
                                     Just itemInInventory ->
-
                                         case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
                                             Nothing ->
                                                 describeBranch "I see no fleet commander. Warp to fleet commander."
                                                     (warpToWatchlistEntry context)
 
                                             Just fleetCommanderInOverview ->
-                                                if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
-                                                    describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
-                                                        (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
-                                                            |> Maybe.withDefault
-                                                                (endDecisionPath
-                                                                    (actWithoutFurtherReadings
-                                                                        ( "Drag and drop."
-                                                                        , EffectOnWindow.effectsForDragAndDrop
-                                                                            { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
-                                                                            , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
-                                                                            , mouseButton = MouseButtonLeft
-                                                                            }
-                                                                        )
-                                                                    )
-                                                                )
-                                                        )
+                                                case fleetCommanderInOverview.objectDistanceInMeters of
+                                                    Just distanceInMeters ->
+                                                        -- if distanceInMeters > 2000 then
+                                                        --     describeBranch "Far enough to start approaching fleet commander."
+                                                        --             (useContextMenuCascadeOnOverviewEntry
+                                                        --                 (useMenuEntryWithTextContaining "Orbit" 
+                                                        --                     (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+                                                        --                 )
+                                                        --                 fleetCommanderInOverview
+                                                        --                 context.readingFromGameClient
+                                                        --             )
+                                                        -- else
 
-                                                else
-                                                    describeBranch ("The ore hold is not yet filled " ++ describeThresholdToUnload ++ ". Get more ore.")
-                                                        (case context.readingFromGameClient.targets |> List.head of
-                                                            Nothing ->
-                                                                describeBranch "I see no locked target."
-                                                                    (travelToMiningSiteAndLaunchDronesAndTargetAsteroid context)
-
-                                                            Just _ ->
-                                                                {- Depending on the UI configuration, the game client might automatically target rats.
-                                                                To avoid these targets interfering with mining, unlock them here.
-                                                                -}
-                                                                unlockTargetsNotForMining context
+                                                        if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
+                                                            describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
+                                                                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
                                                                     |> Maybe.withDefault
-                                                                        (describeBranch "I see a locked target."
-                                                                            (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
-                                                                                Nothing ->
-                                                                                    describeBranch "All known mining modules are active."
-                                                                                        (readShipUIModuleButtonTooltips context
-                                                                                            |> Maybe.withDefault
-                                                                                                (launchDronesAndSendThemToMine context.readingFromGameClient
-                                                                                                    |> Maybe.withDefault waitForProgressInGame
-                                                                                                )
-                                                                                        )
-
-                                                                                Just inactiveModule ->
-                                                                                    describeBranch "I see an inactive mining module. Activate it."
-                                                                                        (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
+                                                                        (endDecisionPath
+                                                                            (actWithoutFurtherReadings
+                                                                                ( "Drag and drop."
+                                                                                , EffectOnWindow.effectsForDragAndDrop
+                                                                                    { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                                                                    , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                                                                    , mouseButton = MouseButtonLeft
+                                                                                    }
+                                                                                )
                                                                             )
                                                                         )
-                                                        ) 
-                                                            
+                                                                )
+
+                                                        else
+                                                            describeBranch ("The ore hold is not yet filled " ++ describeThresholdToUnload ++ ". Get more ore.")
+                                                                (case context.readingFromGameClient.targets |> List.head of
+                                                                    Nothing ->
+                                                                        describeBranch "I see no locked target."
+                                                                            (travelToMiningSiteAndLaunchDronesAndTargetAsteroid context)
+
+                                                                    Just _ ->
+                                                                        {- Depending on the UI configuration, the game client might automatically target rats.
+                                                                        To avoid these targets interfering with mining, unlock them here.
+                                                                        -}
+                                                                        unlockTargetsNotForMining context
+                                                                            |> Maybe.withDefault
+                                                                                (describeBranch "I see a locked target."
+                                                                                    (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
+                                                                                        Nothing ->
+                                                                                            describeBranch "All known mining modules are active."
+                                                                                                (readShipUIModuleButtonTooltips context
+                                                                                                    |> Maybe.withDefault
+                                                                                                        (launchDronesAndSendThemToMine context.readingFromGameClient
+                                                                                                            |> Maybe.withDefault waitForProgressInGame
+                                                                                                        )
+                                                                                                )
+
+                                                                                        Just inactiveModule ->
+                                                                                            describeBranch "I see an inactive mining module. Activate it."
+                                                                                                (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
+                                                                                    )
+                                                                                )
+                                                                ) 
+                                                                    
+
+                                                    Nothing ->
+
+                                                        if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
+                                                            describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
+                                                                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                                                                    |> Maybe.withDefault
+                                                                        (endDecisionPath
+                                                                            (actWithoutFurtherReadings
+                                                                                ( "Drag and drop."
+                                                                                , EffectOnWindow.effectsForDragAndDrop
+                                                                                    { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                                                                    , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                                                                    , mouseButton = MouseButtonLeft
+                                                                                    }
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                )
+
+                                                        else
+                                                            describeBranch ("The ore hold is not yet filled " ++ describeThresholdToUnload ++ ". Get more ore.")
+                                                                (case context.readingFromGameClient.targets |> List.head of
+                                                                    Nothing ->
+                                                                        describeBranch "I see no locked target."
+                                                                            (travelToMiningSiteAndLaunchDronesAndTargetAsteroid context)
+
+                                                                    Just _ ->
+                                                                        {- Depending on the UI configuration, the game client might automatically target rats.
+                                                                        To avoid these targets interfering with mining, unlock them here.
+                                                                        -}
+                                                                        unlockTargetsNotForMining context
+                                                                            |> Maybe.withDefault
+                                                                                (describeBranch "I see a locked target."
+                                                                                    (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
+                                                                                        Nothing ->
+                                                                                            describeBranch "All known mining modules are active."
+                                                                                                (readShipUIModuleButtonTooltips context
+                                                                                                    |> Maybe.withDefault
+                                                                                                        (launchDronesAndSendThemToMine context.readingFromGameClient
+                                                                                                            |> Maybe.withDefault waitForProgressInGame
+                                                                                                        )
+                                                                                                )
+
+                                                                                        Just inactiveModule ->
+                                                                                            describeBranch "I see an inactive mining module. Activate it."
+                                                                                                (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
+                                                                                    )
+                                                                                )
+                                                                ) 
+                                                                    
 
                                                     -- Err error ->
                                                     --     Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)                   
