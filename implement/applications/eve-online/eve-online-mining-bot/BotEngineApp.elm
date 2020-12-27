@@ -54,6 +54,7 @@ import EveOnline.ParseUserInterface
         ( OverviewWindowEntry
         , centerFromDisplayRegion
         , getAllContainedDisplayTexts
+        , listDescendantsWithDisplayRegion
         )
 import Regex
 
@@ -1324,9 +1325,15 @@ overviewWindowEntriesRepresentingAsteroids =
     .overviewWindow
         >> Maybe.map .entries
         >> Maybe.withDefault []
+        >> List.filter overviewWindowEntryRepresentsNoFill
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
-        >> List.filter (entry.uiNode >> .pythonObjectTypeName >> (/=) "Fill")
         -- >> List.filter iconSpriteHasColorOfAsteroid
+
+overviewWindowEntryRepresentsNoFill : OverviewWindowEntry -> Bool
+overviewWindowEntryRepresentsNoFill entry =
+    entry
+        |> listChildrenWithDisplayRegion
+        |> List.any (.uiNode >> .pythonObjectTypeName >> String.toLower >> String.contains "fill") |> not
 
 overviewWindowEntryRepresentsAnAsteroid : OverviewWindowEntry -> Bool
 overviewWindowEntryRepresentsAnAsteroid entry =
