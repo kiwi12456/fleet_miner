@@ -1526,8 +1526,8 @@ processEveOnlineAppEventWithMemoryAndDecisionTree config eventContext event stat
                             case readingFromGameClient |> nextActionEffectFromGameClient of
                                 Nothing ->
                                     ( "Failed step: " ++ nextActionDescription, 
-                                        [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M ]
-                                        , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M ]
+                                        [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M
+                                        , Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M
                                         ]
                                     , Nothing )
 
