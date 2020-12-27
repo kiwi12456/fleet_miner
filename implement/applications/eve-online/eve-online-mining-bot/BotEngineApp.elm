@@ -506,6 +506,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                                                         )
                                                                                     )
                                                                     ) 
+                                                    )                
                                                                                 
                                             
                             Nothing ->
