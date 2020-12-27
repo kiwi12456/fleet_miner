@@ -1390,7 +1390,7 @@ branchDependingOnDockedOrInSpace { ifDocked, ifSeeShipUI, ifUndockingComplete } 
                     (case readingFromGameClient.overviewWindow of
                         Nothing ->
                             -- Common.DecisionTree.describeBranch
-                                "I see no overview window, wait until undocking completed."
+                                -- "I see no overview window, wait until undocking completed."
                                 -- waitForProgressInGame
                                 Common.DecisionTree.endDecisionPath
                                     (actWithoutFurtherReadings
