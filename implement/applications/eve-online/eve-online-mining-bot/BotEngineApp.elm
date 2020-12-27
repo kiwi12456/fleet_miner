@@ -462,8 +462,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                 case fleetCommanderInOverview.objectDistanceInMeters of
                                                     Ok distanceInMeters ->
                                                         if distanceInMeters > 2000 then
-                                                            Just
-                                                                (describeBranch "Far enough to start approaching fleet commander."
+                                                            describeBranch "Far enough to start approaching fleet commander."
                                                                     (useContextMenuCascadeOnOverviewEntry
                                                                         (useMenuEntryWithTextContaining "Orbit" 
                                                                             (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
@@ -471,7 +470,6 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                                         fleetCommanderInOverview
                                                                         context.readingFromGameClient
                                                                     )
-                                                                )
                                                         else
                                                             if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
                                                                 describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
