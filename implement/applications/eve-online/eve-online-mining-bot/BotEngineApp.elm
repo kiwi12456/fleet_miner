@@ -1324,10 +1324,14 @@ overviewWindowEntriesRepresentingAsteroids =
     .overviewWindow
         >> Maybe.map .entries
         >> Maybe.withDefault []
-        >> List.filter (.uiNode >> .pythonObjectTypeName >> String.toLower >> not String.contains "fill")
+        >> List.filter overviewWindowEntryRepresentsNoFill
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
         -- >> List.filter iconSpriteHasColorOfAsteroid
 
+overviewWindowEntryRepresentsNoFill : OverviewWindowEntry -> Bool
+overviewWindowEntryRepresentsNoFill entry =
+    .entry
+        >> List.filter (.uiNode >> .pythonObjectTypeName >> String.toLower >> String.contains "fill") |> not
 
 overviewWindowEntryRepresentsAnAsteroid : OverviewWindowEntry -> Bool
 overviewWindowEntryRepresentsAnAsteroid entry =
