@@ -51,10 +51,10 @@ effectsForDragAndDrop { startLocation, mouseButton, endLocation } =
     , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
     , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
     , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
-    -- , KeyDown (vkey_LSHIFT)
-    -- , KeyDown (vkey_C)
-    -- , KeyUp (vkey_LSHIFT)
-    -- , KeyUp (vkey_C)
+    , KeyDown (vkey_LSHIFT)
+    , KeyDown (vkey_C)
+    , KeyUp (vkey_LSHIFT)
+    , KeyUp (vkey_C)
     ]
 
 
