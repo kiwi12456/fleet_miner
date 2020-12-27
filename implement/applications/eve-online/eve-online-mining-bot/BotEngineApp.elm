@@ -523,7 +523,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                             
 
                                                     Nothing ->
-                                                        describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck
+                                                        describeBranch ("Failed to read the distance.") askForHelpToGetUnstuck
                                             
                             Nothing ->
                                 if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
