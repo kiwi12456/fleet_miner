@@ -1331,7 +1331,7 @@ overviewWindowEntriesRepresentingAsteroids =
 
 overviewWindowEntryRepresentsNoFill : OverviewWindowEntry -> Bool
 overviewWindowEntryRepresentsNoFill entry =
-    entry
+    entry.uiNode
         |> listDescendantsWithDisplayRegion
         |> List.any (.uiNode >> .pythonObjectTypeName >> String.toLower >> String.contains "fill") |> not
 
