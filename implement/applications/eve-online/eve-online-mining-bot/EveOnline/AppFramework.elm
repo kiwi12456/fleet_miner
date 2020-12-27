@@ -1395,8 +1395,8 @@ branchDependingOnDockedOrInSpace { ifDocked, ifSeeShipUI, ifUndockingComplete } 
                                 endDecisionPath
                                     (actWithoutFurtherReadings
                                         ( "I do not see an inventory window. Opening inventory window."
-                                        , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_M ]
-                                        , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_M ]
+                                        , [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M ]
+                                        , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M ]
                                         ]
                                             |> List.concat
                                         )
