@@ -1524,16 +1524,12 @@ processEveOnlineAppEventWithMemoryAndDecisionTree config eventContext event stat
 
                         ( nextActionDescription, nextActionEffectFromGameClient ) :: remainingActions ->
                             case readingFromGameClient |> nextActionEffectFromGameClient of
-                                Nothing ->                                    
-                                    Common.DecisionTree.endDecisionPath
-                                        (actWithoutFurtherReadings
-                                            ( "Failed step: " ++ nextActionDescription
-                                            , [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M ]
-                                            , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M ]
-                                            ]
-                                                |> List.concat
-                                            )
-                                        )
+                                Nothing ->
+                                    ( "Failed step: " ++ nextActionDescription, 
+                                        [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M ]
+                                        , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M ]
+                                        ]
+                                    , Nothing )
 
                                 Just effects ->
                                     ( nextActionDescription
