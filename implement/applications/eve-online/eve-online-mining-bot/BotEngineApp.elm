@@ -56,6 +56,7 @@ import EveOnline.ParseUserInterface
         , getAllContainedDisplayTexts
         , listDescendantsWithDisplayRegion
         , getColorPercentFromDictEntries
+        , getNameFromDictEntries
         )
 import Regex
 
