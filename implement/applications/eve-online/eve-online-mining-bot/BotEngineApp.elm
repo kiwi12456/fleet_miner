@@ -1346,7 +1346,6 @@ iconSpriteHasColorOfAsteroid : OverviewWindowEntry -> Bool
 iconSpriteHasColorOfAsteroid entry =
     entry.uiNode
     |> listDescendantsWithDisplayRegion
-    |> Maybe.withDefault []
     |> List.filter (.uiNode >> getNameFromDictEntries >> (==) (Just "iconSprite"))
     |> List.head
     |> Maybe.andThen (.uiNode >> getColorPercentFromDictEntries)
