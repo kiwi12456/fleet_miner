@@ -691,8 +691,8 @@ ensureOreHoldIsSelectedInInventoryWindow readingFromGameClient continueWithInven
                     endDecisionPath
                         (actWithoutFurtherReadings
                             ( "I do not see an inventory window. Opening inventory window."
-                            , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_M ]
-                            , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_M ]
+                            , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_I ]
+                            , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_I ]
                             ]
                                 |> List.concat
                             )
