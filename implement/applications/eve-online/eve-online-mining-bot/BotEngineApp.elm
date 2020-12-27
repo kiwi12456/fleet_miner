@@ -55,6 +55,7 @@ import EveOnline.ParseUserInterface
         , centerFromDisplayRegion
         , getAllContainedDisplayTexts
         , listDescendantsWithDisplayRegion
+        , getColorPercentFromDictEntries
         )
 import Regex
 
@@ -1327,7 +1328,7 @@ overviewWindowEntriesRepresentingAsteroids =
         >> Maybe.withDefault []
         >> List.filter overviewWindowEntryRepresentsNoFill
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
-        -- >> List.filter iconSpriteHasColorOfAsteroid
+        >> List.filter iconSpriteHasColorOfAsteroid
 
 overviewWindowEntryRepresentsNoFill : OverviewWindowEntry -> Bool
 overviewWindowEntryRepresentsNoFill entry =
@@ -1341,13 +1342,18 @@ overviewWindowEntryRepresentsAnAsteroid entry =
         && (entry.textsLeftToRight |> List.any (String.toLower >> String.contains "belt") |> not)
 
 iconSpriteHasColorOfAsteroid : OverviewWindowEntry -> Bool
-iconSpriteHasColorOfAsteroid =
-    .iconSpriteColorPercent
-        >> Maybe.map
-            (\colorPercent ->
-                colorPercent.r == 100 && colorPercent.g == 100 && colorPercent.b == 100
-            )
-        >> Maybe.withDefault False
+iconSpriteHasColorOfAsteroid entry =
+    entry.uiNode
+    |> listDescendantsWithDisplayRegion
+    |> Maybe.withDefault []
+    |> List.filter (.uiNode >> getNameFromDictEntries >> (==) (Just "iconSprite"))
+    |> List.head
+    |> Maybe.andThen (.uiNode >> getColorPercentFromDictEntries)
+    >> Maybe.map
+        (\colorPercent ->
+            colorPercent.r == 100 && colorPercent.g == 100 && colorPercent.b == 100
+        )
+    >> Maybe.withDefault False
 
 fleetCommanderFromOverviewWindow : ReadingFromGameClient -> Maybe OverviewWindowEntry
 fleetCommanderFromOverviewWindow =
