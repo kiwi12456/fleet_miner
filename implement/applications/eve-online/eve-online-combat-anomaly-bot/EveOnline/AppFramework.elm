@@ -1391,7 +1391,16 @@ branchDependingOnDockedOrInSpace { ifDocked, ifSeeShipUI, ifUndockingComplete } 
                         Nothing ->
                             Common.DecisionTree.describeBranch
                                 "I see no overview window, wait until undocking completed."
-                                waitForProgressInGame
+                                -- waitForProgressInGame
+                                endDecisionPath
+                                    (actWithoutFurtherReadings
+                                        ( "I do not see an inventory window. Opening inventory window."
+                                        , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_M ]
+                                        , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_M ]
+                                        ]
+                                            |> List.concat
+                                        )
+                                    )
 
                         Just overviewWindow ->
                             Common.DecisionTree.describeBranch "I see ship UI and overview, undocking complete."
