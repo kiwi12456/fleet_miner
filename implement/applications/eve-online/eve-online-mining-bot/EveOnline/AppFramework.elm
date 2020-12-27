@@ -1525,7 +1525,17 @@ processEveOnlineAppEventWithMemoryAndDecisionTree config eventContext event stat
                         ( nextActionDescription, nextActionEffectFromGameClient ) :: remainingActions ->
                             case readingFromGameClient |> nextActionEffectFromGameClient of
                                 Nothing ->
-                                    ( "Failed step: " ++ nextActionDescription, [], Nothing )
+                                    ( "Failed step: " ++ nextActionDescription, [], 
+                                        Common.DecisionTree.endDecisionPath
+                                            (actWithoutFurtherReadings
+                                                ( "I see no overview window, wait until undocking completed."
+                                                , [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M ]
+                                                , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M ]
+                                                ]
+                                                    |> List.concat
+                                                )
+                                            )
+                                    )
 
                                 Just effects ->
                                     ( nextActionDescription
