@@ -1325,7 +1325,7 @@ overviewWindowEntriesRepresentingAsteroids =
         >> Maybe.map .entries
         >> Maybe.withDefault []
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
-        >> List.filter iconSpriteHasColorOfAsteroid
+        -- >> List.filter iconSpriteHasColorOfAsteroid
 
 
 overviewWindowEntryRepresentsAnAsteroid : OverviewWindowEntry -> Bool
