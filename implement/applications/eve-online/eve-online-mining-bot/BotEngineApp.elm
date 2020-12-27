@@ -460,7 +460,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                             Just fleetCommanderInOverview ->
 
                                                 case fleetCommanderInOverview.objectDistanceInMeters of
-                                                    Ok distanceInMeters ->
+                                                    Just distanceInMeters ->
                                                         if distanceInMeters > 2000 then
                                                             Just
                                                                 (describeBranch "Far enough to start approaching fleet commander."
@@ -522,8 +522,8 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                                     ) 
                                                             
 
-                                                    Err error ->
-                                                        Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)                   
+                                                    Nothing ->
+                                                        describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck
                                             
                             Nothing ->
                                 if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
