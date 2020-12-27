@@ -670,10 +670,10 @@ ensureOreHoldIsSelectedInInventoryWindow readingFromGameClient continueWithInven
         Nothing ->
             case readingFromGameClient.inventoryWindows |> List.head of
                 Nothing ->
-                    describeBranch "I do not see an inventory window. Opening inventory window."
-                        (endDecisionPath
+                    -- describeBranch "I do not see an inventory window. Opening inventory window."
+                        endDecisionPath
                             (actWithoutFurtherReadings
-                                ( "Press the 'W' key and click on the overview entry."
+                                ( "I do not see an inventory window. Opening inventory window."
                                 , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_LSHIFT ]
                                 , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_C ]
                                 , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_LSHIFT ]
@@ -682,7 +682,7 @@ ensureOreHoldIsSelectedInInventoryWindow readingFromGameClient continueWithInven
                                     |> List.concat
                                 )
                             )
-                        )
+                        
 
                 Just inventoryWindow ->
                     describeBranch
