@@ -795,15 +795,16 @@ dockToStationOrStructureWithMatchingName { prioritizeStructures, nameFromSetting
             (overviewWindowScrollControls
                 |> Maybe.andThen scrollDown
                 |> Maybe.withDefault
-                    endDecisionPath
-                        (actWithoutFurtherReadings
-                            ( "I do not see the station in the overview window. I use the menu from the surroundings button."
-                            , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_M ]
-                            , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_M ]
-                            ]
-                                |> List.concat
-                            )
+                    (describeBranch "I do not see the station in the overview window. I use the menu from the surroundings button."
+                        (dockToStationOrStructureUsingSurroundingsButtonMenu
+                            { prioritizeStructures = prioritizeStructures
+                            , describeChoice = "representing the station or structure '" ++ nameFromSettingOrInfoPanel ++ "'."
+                            , chooseEntry =
+                                List.filter (.text >> displayTextRepresentsMatchingStation) >> List.head
+                            }
+                            readingFromGameClient
                         )
+                    )
             )
 
 
