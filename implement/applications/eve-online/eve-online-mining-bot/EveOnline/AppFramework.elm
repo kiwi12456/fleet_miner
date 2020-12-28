@@ -1395,8 +1395,8 @@ branchDependingOnDockedOrInSpace { ifDocked, ifSeeShipUI, ifUndockingComplete } 
                                 Common.DecisionTree.endDecisionPath
                                     (actWithoutFurtherReadings
                                         ( "I see no overview window, wait until undocking completed."
-                                        , [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M ]
-                                        , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M ]
+                                        , [ [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_END ]
+                                        , [ Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_END ]
                                         ]
                                             |> List.concat
                                         )
@@ -1526,8 +1526,8 @@ processEveOnlineAppEventWithMemoryAndDecisionTree config eventContext event stat
                             case readingFromGameClient |> nextActionEffectFromGameClient of
                                 Nothing ->
                                     ( "Failed step: " ++ nextActionDescription, 
-                                        [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_M
-                                        , Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_M
+                                        [ Common.EffectOnWindow.KeyDown Common.EffectOnWindow.vkey_END
+                                        , Common.EffectOnWindow.KeyUp Common.EffectOnWindow.vkey_END
                                         ]
                                     , Nothing )
 
