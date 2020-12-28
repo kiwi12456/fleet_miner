@@ -352,18 +352,34 @@ dockedWithOreHoldSelected context inventoryWindowWithOreHoldSelected =
                         )
 
                 Just itemInInventory ->
-                    describeBranch "I see at least one item in the ore hold. Move this to the item hangar."
-                        (endDecisionPath
-                            (actWithoutFurtherReadings
-                                ( "Drag and drop."
-                                , EffectOnWindow.effectsForDragAndDrop
-                                    { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
-                                    , endLocation = itemHangar.totalDisplayRegion |> centerFromDisplayRegion
-                                    , mouseButton = MouseButtonLeft
-                                    }
+                    let
+                        allItemsSelected =
+                            inventoryWindowWithOreHoldSelected.uiNode.uiNode
+                                |> getAllContainedDisplayTexts
+                                |> List.filter (String.toLower >> String.contains "/")
+                                |> List.head
+                    in
+                    case allItemsSelected of
+                        Nothing ->
+                            describeBranch "Select all ore items to drag into item hangar"
+                                (useContextMenuCascade
+                                    ( "Ore Hangar", itemInInventory )
+                                        (useMenuEntryWithTextContaining "Select All" menuCascadeCompleted)
+                                    context.readingFromGameClient
                                 )
-                            )
-                        )
+                        Just allItems ->
+                            describeBranch "I see at least one item in the ore hold. Move this to the item hangar."
+                                (endDecisionPath
+                                    (actWithoutFurtherReadings
+                                        ( "Drag and drop."
+                                        , EffectOnWindow.effectsForDragAndDrop
+                                            { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                            , endLocation = itemHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                            , mouseButton = MouseButtonLeft
+                                            }
+                                        )
+                                    )
+                                )
 
 
 undockUsingStationWindow : BotDecisionContext -> DecisionPathNode
@@ -464,21 +480,37 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
 
                                             Just fleetCommanderInOverview ->
                                                 if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
-                                                    describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
-                                                        (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
-                                                            |> Maybe.withDefault
-                                                                (endDecisionPath
-                                                                    (actWithoutFurtherReadings
-                                                                        ( "Drag and drop."
-                                                                        , EffectOnWindow.effectsForDragAndDrop
-                                                                            { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
-                                                                            , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
-                                                                            , mouseButton = MouseButtonLeft
-                                                                            }
-                                                                        )
-                                                                    )
+                                                    let
+                                                        allItemsSelected =
+                                                            inventoryWindowWithOreHoldSelected.uiNode.uiNode
+                                                                |> getAllContainedDisplayTexts
+                                                                |> List.filter (String.toLower >> String.contains "/")
+                                                                |> List.head
+                                                    in
+                                                    case allItemsSelected of
+                                                        Nothing ->
+                                                            describeBranch "Select all ore items to drag into fleet hangar"
+                                                                (useContextMenuCascade
+                                                                    ( "Ore Hangar", itemInInventory )
+                                                                        (useMenuEntryWithTextContaining "Select All" menuCascadeCompleted)
+                                                                    context.readingFromGameClient
                                                                 )
-                                                        )
+                                                        Just allItems ->
+                                                            describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
+                                                                (approachFleetCommanderIfFarEnough context fleetCommanderInOverview
+                                                                    |> Maybe.withDefault
+                                                                        (endDecisionPath
+                                                                            (actWithoutFurtherReadings
+                                                                                ( "Drag and drop."
+                                                                                , EffectOnWindow.effectsForDragAndDrop
+                                                                                    { startLocation = itemInInventory.totalDisplayRegion |> centerFromDisplayRegion
+                                                                                    , endLocation = fleetHangar.totalDisplayRegion |> centerFromDisplayRegion
+                                                                                    , mouseButton = MouseButtonLeft
+                                                                                    }
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                )
 
                                                 else
                                                     describeBranch ("The ore hold is not yet filled " ++ describeThresholdToUnload ++ ". Get more ore.")
