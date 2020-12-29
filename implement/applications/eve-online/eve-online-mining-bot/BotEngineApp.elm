@@ -993,7 +993,7 @@ warpToWatchlistEntry context =
                 (useContextMenuCascade
                     ( "Watchlist entry", watchlistEntry )
                     (useMenuEntryWithTextContainingFirstOf
-                        [ "approach", "warp" ]
+                        [ "approach", "warp to member within" ]
                         (useMenuEntryWithTextContaining "Within 0 m" menuCascadeCompleted)
                     )
                     -- (useMenuEntryWithTextContaining "Warp to Member Within"
