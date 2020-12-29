@@ -965,13 +965,13 @@ warpToFleetCommander context =
                                     describeBranch ("Current Solar System Not Found") askForHelpToGetUnstuck
                                 Just currentSolarSystem ->
                                     -- describeBranch ("Actual Destination is: " ++ stringFromBool(actualDestination == currentSolarSystem)) askForHelpToGetUnstuck
-                                    if (actualDestination == currentSolarSystem) then
-                                        describeBranch "I see no fleet commander. Warp to fleet commander."      
+                                    if (actualDestination == currentSolarSystem) || (actualDestination == "Broadcasts)") then
+                                        describeBranch ("I see no fleet commander. Warp to fleet commander.")
                                             (returnDronesToBay context.readingFromGameClient
                                                 |> Maybe.withDefault (warpToWatchlistEntry context)
                                             )
                                     else
-                                        describeBranch "Fleet Window found in different solar system. Set destination to fleet commander solar system."
+                                        describeBranch ("Fleet Window found in different solar system. Set destination to fleet commander solar system.")
                                             (useContextMenuCascade
                                                 ( "Fleet destination", fleetDestination )
                                                 (useMenuEntryWithTextContaining "Set Destination" menuCascadeCompleted)
