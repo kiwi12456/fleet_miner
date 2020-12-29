@@ -484,7 +484,8 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                             Just itemInInventory ->
                                                 case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
                                                     Nothing ->
-                                                        ------------------------
+                                                        describeBranch "Fleet commander not found in overview window. Warp to fleet commander."
+                                                            (warpToFleetCommander context)
 
                                                     Just fleetCommanderInOverview ->
                                                         if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
