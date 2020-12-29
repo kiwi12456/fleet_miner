@@ -515,11 +515,11 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                                                                                                         context.readingFromGameClient
                                                                                                     )
 
-                                                        Nothing ->
-                                                            describeBranch "I see no fleet commander. Warp to fleet commander."      
-                                                                (returnDronesToBay context.readingFromGameClient
-                                                                    |> Maybe.withDefault (warpToWatchlistEntry context)
-                                                                )
+                                                            Nothing ->
+                                                                describeBranch "I see no fleet commander. Warp to fleet commander."      
+                                                                    (returnDronesToBay context.readingFromGameClient
+                                                                        |> Maybe.withDefault (warpToWatchlistEntry context)
+                                                                    )
 
                                                     Just fleetCommanderInOverview ->
                                                         if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
