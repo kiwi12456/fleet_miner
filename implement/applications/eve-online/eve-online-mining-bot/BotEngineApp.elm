@@ -471,12 +471,42 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
 
                                     Just itemInInventory ->
                                         case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
-                                            Nothing ->
-                                                describeBranch "I see no fleet commander. Warp to fleet commander."
-                                                    (returnDronesToBay context.readingFromGameClient
-                                                        |> Maybe.withDefault
-                                                            (warpToWatchlistEntry context)
-                                                    )
+                                            case context.readingFromGameClient.fleetWindow |> Maybe.andThen (.fleetMembers >> List.head) of
+                                                Just fleetDestination ->
+                                                    case fleetDestination.uiNode |> getAllContainedDisplayTexts |> List.head of
+                                                        Nothing ->
+                                                            describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
+                                                        Just fleetBroadcastText ->
+                                                            case (String.split " " fleetBroadcastText |> List.reverse |> List.head) of
+                                                                    Nothing ->
+                                                                        describeBranch ("Cannot find fleet broadcast message.") askForHelpToGetUnstuck
+                                                                    Just actualDestination ->
+                                                                        case context.readingFromGameClient.infoPanelContainer
+                                                                                |> Maybe.andThen .infoPanelLocationInfo
+                                                                                |> Maybe.andThen .currentSolarSystemName
+                                                                        of
+                                                                            Nothing -> 
+                                                                                describeBranch ("Current Solar System Not Found") askForHelpToGetUnstuck
+                                                                            Just currentSolarSystem ->
+                                                                                -- describeBranch ("Actual Destination is: " ++ stringFromBool(actualDestination == currentSolarSystem)) askForHelpToGetUnstuck
+                                                                                if (actualDestination == currentSolarSystem) then
+                                                                                    describeBranch "I see no fleet commander. Warp to fleet commander."      
+                                                                                        (returnDronesToBay context.readingFromGameClient
+                                                                                            |> Maybe.withDefault (warpToWatchlistEntry context)
+                                                                                        )
+                                                                                else
+                                                                                    describeBranch "Fleet Window found in different solar system. Set destination to fleet commander solar system."
+                                                                                        (useContextMenuCascade
+                                                                                            ( "Fleet destination", fleetDestination )
+                                                                                            (useMenuEntryWithTextContaining "Set Destination" menuCascadeCompleted)
+                                                                                            context.readingFromGameClient
+                                                                                        )
+
+                                                Nothing ->
+                                                    describeBranch "I see no fleet commander. Warp to fleet commander."      
+                                                        (returnDronesToBay context.readingFromGameClient
+                                                            |> Maybe.withDefault (warpToWatchlistEntry context)
+                                                        )
 
                                             Just fleetCommanderInOverview ->
                                                 if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then

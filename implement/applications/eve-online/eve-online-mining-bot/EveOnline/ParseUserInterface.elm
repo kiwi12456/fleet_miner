@@ -2251,11 +2251,13 @@ parseFleetWindow windowUINode =
         fleetMembers =
             windowUINode
                 |> listDescendantsWithDisplayRegion
-                |> List.filter (.uiNode >> .pythonObjectTypeName >> (==) "FleetMember")
+                |> List.filter (.uiNode >> getNameFromDictEntries >> (==) (Just "lastbroadcastheader"))
+                -- |> List.filter (.uiNode >> .pythonObjectTypeName >> (==) "EveLabelMedium")
     in
     { uiNode = windowUINode
     , fleetMembers = fleetMembers
     }
+
 
 
 parseWatchListPanelFromUITreeRoot : UITreeNodeWithDisplayRegion -> Maybe WatchListPanel
