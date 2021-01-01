@@ -413,7 +413,7 @@ inSpaceWithOreHoldSelected : BotDecisionContext -> SeeUndockingComplete -> EveOn
 inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHoldSelected =
     case context.readingFromGameClient.hudWindow of
         Just hudItem1 ->
-            case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.head of
+            case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> List.head of
                 Nothing ->
                     describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
                 Just fleetBroadcastText ->
