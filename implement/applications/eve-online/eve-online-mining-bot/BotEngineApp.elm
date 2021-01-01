@@ -408,9 +408,8 @@ undockUsingStationWindow context =
                             )
                         )
 
-
-inSpaceWithOreHoldSelected : BotDecisionContext -> SeeUndockingComplete -> EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode
-inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHoldSelected =
+hudWindowApproach : BotDecisionContext -> DecisionPathNode
+hudWindowApproach context =
     case context.readingFromGameClient.hudWindow of
         Just hudItem1 ->
             case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> Maybe.andThen List.head of
@@ -425,6 +424,10 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
         Nothing ->
             describeBranch "Continue..." askForHelpToGetUnstuck
 
+
+inSpaceWithOreHoldSelected : BotDecisionContext -> SeeUndockingComplete -> EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode
+inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHoldSelected =
+    hudWindowApproach context
 
     -- if seeUndockingComplete.shipUI |> shipUIIndicatesShipIsWarpingOrJumping then
     --     describeBranch "I see we are warping."
