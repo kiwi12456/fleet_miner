@@ -418,7 +418,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                     describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
                 Just hudText ->
                     if (hudText == "<center>Tris Z's Orca") then
-                        describeBranch ("Hud found!" ++ fleetBroadcastText) askForHelpToGetUnstuck
+                        describeBranch ("Hud found!" ++ hudText) askForHelpToGetUnstuck
                     else
                         describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
         
