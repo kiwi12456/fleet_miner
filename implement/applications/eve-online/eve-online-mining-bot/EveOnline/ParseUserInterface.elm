@@ -31,6 +31,7 @@ type alias ParsedUserInterface =
     , repairShopWindow : Maybe RepairShopWindow
     , characterSheetWindow : Maybe CharacterSheetWindow
     , fleetWindow : Maybe FleetWindow
+    , hudWindow : Maybe HudWindow
     , watchListPanel : Maybe WatchListPanel
     , moduleButtonTooltip : Maybe ModuleButtonTooltip
     , neocom : Maybe Neocom
@@ -481,6 +482,11 @@ type alias FleetWindow =
     , fleetMembers : List UITreeNodeWithDisplayRegion
     }
 
+type alias HudWindow =
+    { uiNode : UITreeNodeWithDisplayRegion
+    , hud : List UITreeNodeWithDisplayRegion
+    }
+
 
 type alias WatchListPanel =
     { uiNode : UITreeNodeWithDisplayRegion
@@ -525,6 +531,7 @@ parseUserInterfaceFromUITree uiTree =
     , repairShopWindow = parseRepairShopWindowFromUITreeRoot uiTree
     , characterSheetWindow = parseCharacterSheetWindowFromUITreeRoot uiTree
     , fleetWindow = parseFleetWindowFromUITreeRoot uiTree
+    , hudWindow = parseHudWindowFromUITreeRoot uiTree
     , watchListPanel = parseWatchListPanelFromUITreeRoot uiTree
     , neocom = parseNeocomFromUITreeRoot uiTree
     , messageBoxes = parseMessageBoxesFromUITreeRoot uiTree
@@ -2258,6 +2265,26 @@ parseFleetWindow windowUINode =
     , fleetMembers = fleetMembers
     }
 
+parseHudWindowFromUITreeRoot : UITreeNodeWithDisplayRegion -> Maybe HudWindow
+parseHudWindowFromUITreeRoot uiTreeRoot =
+    uiTreeRoot
+        |> listDescendantsWithDisplayRegion
+        |> List.filter (.uiNode >> .pythonObjectTypeName >> (==) "HudContainer")
+        |> List.head
+        |> Maybe.map parseHudWindow
+
+
+parseHudWindow : UITreeNodeWithDisplayRegion -> HudWindow
+parseHudWindow windowUINode =
+    let
+        hud =
+            windowUINode
+                |> listDescendantsWithDisplayRegion
+                |> List.filter (.uiNode >> getNameFromDictEntries >> (==) (Just "indicationContainer"))
+    in
+    { uiNode = windowUINode
+    , hud = hud
+    }
 
 
 parseWatchListPanelFromUITreeRoot : UITreeNodeWithDisplayRegion -> Maybe WatchListPanel
