@@ -412,7 +412,15 @@ inSpaceWithOreHoldSelected : BotDecisionContext -> SeeUndockingComplete -> EveOn
 inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHoldSelected =
     case context.readingFromGameClient.hudWindow of
         Just hudItem1 ->
-            describeBranch "Hud found!" askForHelpToGetUnstuck
+            let
+                hudTris =
+                    hudItem1.uiNode
+                        |> getAllContainedDisplayTexts
+                        |> List.filterMap (getSubstringBetweenXmlTagsAfterMarker "center")
+                        |> List.head
+                        |> Maybe.map String.trim
+            in
+            describeBranch ("Hud found!" ++ hudTris) askForHelpToGetUnstuck
             -- case hudItem1.uiNode |> getAllContainedDisplayTexts |> List.head of
             --     Nothing ->
             --         describeBranch ("No text in hud.") askForHelpToGetUnstuck
