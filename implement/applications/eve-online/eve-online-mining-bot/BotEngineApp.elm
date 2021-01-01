@@ -416,8 +416,11 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
             case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> Maybe.andThen List.head of
                 Nothing ->
                     describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
-                Just fleetBroadcastText ->
-                    describeBranch ("Hud found!" ++ fleetBroadcastText) askForHelpToGetUnstuck
+                Just hudText ->
+                    if (hudText == "<center>Tris Z's Orca") then
+                        describeBranch ("Hud found!" ++ fleetBroadcastText) askForHelpToGetUnstuck
+                    else
+                        describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
         
         Nothing ->
             describeBranch "Continue..." askForHelpToGetUnstuck
