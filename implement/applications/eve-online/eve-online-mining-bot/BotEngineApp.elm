@@ -410,7 +410,7 @@ undockUsingStationWindow context =
 
 inSpaceWithOreHoldSelected : BotDecisionContext -> SeeUndockingComplete -> EveOnline.ParseUserInterface.InventoryWindow -> DecisionPathNode
 inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHoldSelected =
-    case context.readingFromGameClient.hudWindow.hud of
+    case context.readingFromGameClient.hudWindow of
         Just hudItem1 ->
             describeBranch "Hud found!" askForHelpToGetUnstuck
             -- case hudItem1.uiNode |> getAllContainedDisplayTexts |> List.head of
