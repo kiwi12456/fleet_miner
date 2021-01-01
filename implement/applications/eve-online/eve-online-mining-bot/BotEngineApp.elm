@@ -417,7 +417,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                 Nothing ->
                     describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
                 Just fleetBroadcastText ->
-                    describeBranch ("Hud found!") askForHelpToGetUnstuck
+                    describeBranch ("Hud found!" ++ fleetBroadcastText) askForHelpToGetUnstuck
         
         Nothing ->
             describeBranch "Continue..." askForHelpToGetUnstuck
