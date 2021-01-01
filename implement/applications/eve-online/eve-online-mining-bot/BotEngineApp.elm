@@ -417,9 +417,8 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                 hudTris =
                     hudItem1.hud.uiNode.uiNode
                         |> getAllContainedDisplayTexts
-                        |> List.filterMap (getSubstringBetweenXmlTagsAfterMarker "center")
+                        |> List.filter (String.toLower >> String.contains "tris")
                         |> List.head
-                        |> Maybe.map String.trim
             in
             describeBranch ("Hud found!" ++ hudTris) askForHelpToGetUnstuck
             -- case hudItem1.uiNode |> getAllContainedDisplayTexts |> List.head of
