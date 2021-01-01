@@ -415,13 +415,17 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
         Just hudItem1 ->
             case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> Maybe.andThen List.head of
                 Nothing ->
-                    describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
+                    (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
                 Just hudText ->
-                    if (hudText == "<center>Tris Z's Orca") then
-                        describeBranch ("Hud found!" ++ hudText) askForHelpToGetUnstuck
-                    else
-                        describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
-        
+                    case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> Maybe.andThen List.tail of
+                        Nothing ->
+                            (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
+                        Just hudText2 ->
+                            if (hudText == "<center>Tris Z's Orca" && hudText2 == "Approaching") then
+                                describeBranch ("Hud found!") askForHelpToGetUnstuck
+                                    (orbitWatchlistEntry context)
+                            else
+                                (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
         Nothing ->
             (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
 
@@ -1016,6 +1020,23 @@ warpToWatchlistEntry context =
                     -- (useMenuEntryWithTextContaining "Warp to Member Within"
                     --     (useMenuEntryWithTextContaining "Within 0 m" menuCascadeCompleted)
                     -- )
+                    context.readingFromGameClient
+                )
+
+        Nothing ->
+            describeBranch "I see no entry in the watchlist panel. Warping directly to mining site."
+                (warpToMiningSite context.readingFromGameClient)
+
+orbitWatchlistEntry : BotDecisionContext -> DecisionPathNode
+orbitWatchlistEntry context =
+    case context.readingFromGameClient.watchListPanel |> Maybe.andThen (.entries >> List.head) of
+        Just watchlistEntry ->
+            describeBranch "Orbit entry in watchlist panel."
+                (useContextMenuCascade
+                    ( "Watchlist entry", watchlistEntry )
+                    (useMenuEntryWithTextContaining "Orbit"
+                        (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+                    )
                     context.readingFromGameClient
                 )
 
