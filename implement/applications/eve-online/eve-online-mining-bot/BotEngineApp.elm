@@ -417,7 +417,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                 Nothing ->
                     (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
                 Just hudText ->
-                    case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> Maybe.andThen List.tail of
+                    case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.tail |> Maybe.andThen List.tail |> Maybe.andThen List.head of
                         Nothing ->
                             (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
                         Just hudText2 ->
