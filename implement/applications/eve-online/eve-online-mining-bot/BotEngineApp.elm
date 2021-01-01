@@ -58,6 +58,7 @@ import EveOnline.ParseUserInterface
         , listDescendantsWithDisplayRegion
         , getColorPercentFromDictEntries
         , getNameFromDictEntries
+        , getSubstringBetweenXmlTagsAfterMarker
         )
 import Regex
 
