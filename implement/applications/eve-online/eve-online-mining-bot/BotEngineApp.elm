@@ -413,25 +413,14 @@ inSpaceWithOreHoldSelected : BotDecisionContext -> SeeUndockingComplete -> EveOn
 inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHoldSelected =
     case context.readingFromGameClient.hudWindow of
         Just hudItem1 ->
-            let
-                hudTris =
-                    hudItem1.hud.uiNode.uiNode
-                        |> getAllContainedDisplayTexts
-                        |> List.filter (String.toLower >> String.contains "tris")
-                        -- |> List.head
-            in
-            describeBranch ("Hud found!" ++ hudTris) askForHelpToGetUnstuck
-            -- case hudItem1.uiNode |> getAllContainedDisplayTexts |> List.head of
-            --     Nothing ->
-            --         describeBranch ("No text in hud.") askForHelpToGetUnstuck
-            --     Just hudItem2 ->
-            --         case (String.split " " fleetBroadcastText |> List.reverse |> List.head) of
+            case hudItem1.uiNode.uiNode |> getAllContainedDisplayTexts |> List.head of
+                Nothing ->
+                    describeBranch ("Cannot find fleet broadcast.") askForHelpToGetUnstuck
+                Just fleetBroadcastText ->
+                    describeBranch ("Hud found!") askForHelpToGetUnstuck
         
         Nothing ->
             describeBranch "Continue..." askForHelpToGetUnstuck
-
-
-
 
 
     -- if seeUndockingComplete.shipUI |> shipUIIndicatesShipIsWarpingOrJumping then
