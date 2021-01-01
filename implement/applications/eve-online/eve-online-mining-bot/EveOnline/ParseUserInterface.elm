@@ -2280,7 +2280,7 @@ parseHudWindow windowUINode =
         hud =
             windowUINode
                 |> listDescendantsWithDisplayRegion
-                |> List.filter (.uiNode >> getNameFromDictEntries >> (==) (Just "indicationContainer"))
+                |> List.filter (.uiNode >> getNameFromDictEntries >> (==) (Just "indicationtext2"))
     in
     { uiNode = windowUINode
     , hud = hud
