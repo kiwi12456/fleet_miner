@@ -415,7 +415,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
         Just hudItem1 ->
             let
                 hudTris =
-                    hudItem1.uiNode
+                    hudItem1
                         |> getAllContainedDisplayTexts
                         |> List.filterMap (getSubstringBetweenXmlTagsAfterMarker "center")
                         |> List.head
