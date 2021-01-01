@@ -419,7 +419,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
             --     Just hudItem2 ->
             --         case (String.split " " fleetBroadcastText |> List.reverse |> List.head) of
         
-        Nothing
+        Nothing ->
             describeBranch "Continue..." askForHelpToGetUnstuck
 
 
