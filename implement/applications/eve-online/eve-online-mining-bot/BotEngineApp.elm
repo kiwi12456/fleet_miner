@@ -422,7 +422,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                             (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
                         Just hudText2 ->
                             if (hudText == "<center>Tris Z's Orca" && hudText2 == "Approaching") then
-                                describeBranch ("Hud found!") askForHelpToGetUnstuck
+                                describeBranch ("Hud found!")
                                     (orbitWatchlistEntry context)
                             else
                                 (inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWithOreHoldSelected)
