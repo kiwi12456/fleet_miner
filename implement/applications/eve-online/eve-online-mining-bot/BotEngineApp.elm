@@ -418,7 +418,7 @@ inSpaceWithOreHoldSelected context seeUndockingComplete inventoryWindowWithOreHo
                     hudItem1.hud.uiNode.uiNode
                         |> getAllContainedDisplayTexts
                         |> List.filter (String.toLower >> String.contains "tris")
-                        |> List.head
+                        -- |> List.head
             in
             describeBranch ("Hud found!" ++ hudTris) askForHelpToGetUnstuck
             -- case hudItem1.uiNode |> getAllContainedDisplayTexts |> List.head of
