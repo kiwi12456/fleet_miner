@@ -484,7 +484,7 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                             -}
                                                             unlockTargetsNotForMining context
                                                                 |> Maybe.withDefault
-                                                                    (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> Result.toMaybe ) of
+                                                                    (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> List.head ) of
                                                                         Just targetAssigned ->
                                                                             describeBranch "Found targets assigned" waitForProgressInGame
                                                                         Nothing ->
