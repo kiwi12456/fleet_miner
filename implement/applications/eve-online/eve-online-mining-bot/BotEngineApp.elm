@@ -615,7 +615,19 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                         describeBranch "Found targets assigned"
                                                                             (case (targetAssigned.assignedIcons |> List.head) of
                                                                                     Nothing ->
-                                                                                        describeBranch "Target assigned but not being mined." waitForProgressInGame
+                                                                                        endDecisionPath
+                                                                                            (actWithoutFurtherReadings
+                                                                                                ( "Target assigned but not being mined. Trigger F1 and F2."
+                                                                                                , [ 
+                                                                                                    [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F1]
+                                                                                                  , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F1 ]
+                                                                                                  , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F2 ]
+                                                                                                  , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F2 ]
+                                                                                                ]
+                                                                                                    |> List.concat
+                                                                                                )
+                                                                                            )
+
                                                                                     Just targetAssignedIcon ->
                                                                                         describeBranch "Target already being mined." waitForProgressInGame
 
