@@ -617,12 +617,14 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                                     Nothing ->
                                                                                         endDecisionPath
                                                                                             (actWithoutFurtherReadings
-                                                                                                ( "Target assigned but not being mined. Trigger F1 and F2."
+                                                                                                ( "Target assigned but not being mined. Trigger F1, F2 and mining drones."
                                                                                                 , [ 
                                                                                                     [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F1]
                                                                                                   , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F1 ]
                                                                                                   , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F2 ]
                                                                                                   , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F2 ]
+                                                                                                  , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F ]
+                                                                                                  , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F ]
                                                                                                 ]
                                                                                                     |> List.concat
                                                                                                 )
