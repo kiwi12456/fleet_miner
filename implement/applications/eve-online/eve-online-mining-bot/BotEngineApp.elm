@@ -662,7 +662,7 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                 )
 
 
-processLockedTargets : BotDecisionContext -> Maybe DecisionPathNode
+processLockedTargets : BotDecisionContext -> DecisionPathNode
 processLockedTargets context =
     describeBranch "I see a locked target."
         (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
