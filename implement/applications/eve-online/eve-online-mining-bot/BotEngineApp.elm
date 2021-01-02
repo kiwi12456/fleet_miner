@@ -613,7 +613,7 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                 (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> List.head ) of
                                                                     Just targetAssigned ->
                                                                         describeBranch "Found targets assigned"
-                                                                            (case (targetAssigned .assignedIcons |> Maybe.andThen List.head) of
+                                                                            (case (targetAssigned.assignedIcons |> List.head) of
                                                                                     Nothing ->
                                                                                         describeBranch "Target assigned but not being mined." waitForProgressInGame
                                                                                     Just targetAssignedIcon ->
