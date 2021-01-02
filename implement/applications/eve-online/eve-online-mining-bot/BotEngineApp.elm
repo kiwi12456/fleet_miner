@@ -631,11 +631,13 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                                             )
 
                                                                                     Just targetAssignedIcon ->
-                                                                                        describeBranch "Target already being mined." waitForProgressInGame
+                                                                                        describeBranch "Target already being mined."
+                                                                                            (processLockedTargets context)
 
                                                                             )
                                                                     Nothing ->
-                                                                        describeBranch "Found no targets." waitForProgressInGame
+                                                                        describeBranch "Found no targets."
+                                                                            (processLockedTargets context)
                                                                 )
 
 
@@ -659,6 +661,24 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                         --         )
                                                 )
 
+
+processLockedTargets : BotDecisionContext -> Maybe DecisionPathNode
+processLockedTargets context =
+    describeBranch "I see a locked target."
+        (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
+            Nothing ->
+                describeBranch "All known mining modules are active."
+                    (readShipUIModuleButtonTooltips context
+                        |> Maybe.withDefault
+                            (launchDronesAndSendThemToMine context.readingFromGameClient
+                                |> Maybe.withDefault waitForProgressInGame
+                            )
+                    )
+
+            Just inactiveModule ->
+                describeBranch "I see an inactive mining module. Activate it."
+                    (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
+        )
 
 unlockTargetsNotForMining : BotDecisionContext -> Maybe DecisionPathNode
 unlockTargetsNotForMining context =
