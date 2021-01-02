@@ -99,6 +99,8 @@ effectsForLockTarget { startLocation, mouseButton } =
 effectsForOrbit : { startLocation : Location2d, mouseButton : MouseButton } -> List EffectOnWindowStructure
 effectsForOrbit { startLocation, mouseButton } =
     [ MouseMoveTo startLocation
+    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
     , KeyDown (vkey_W)
     , KeyUp (vkey_W)
     ]
