@@ -1051,23 +1051,23 @@ orbitWatchlistEntry : BotDecisionContext -> DecisionPathNode
 orbitWatchlistEntry context =
     case context.readingFromGameClient.watchListPanel |> Maybe.andThen (.entries >> List.head) of
         Just watchlistEntry ->
-            endDecisionPath
-                (actWithoutFurtherReadings
-                    ( "Orbit entry in watchlist panel."
-                    , EffectOnWindow.effectsForOrbit
-                        { startLocation = { x = watchlistEntry.uiNode.totalDisplayRegion.x, y = watchlistEntry.uiNode.totalDisplayRegion.y}
-                        , mouseButton = MouseButtonLeft
-                        }
-                    )
-                )
-            -- describeBranch "Orbit entry in watchlist panel."
-            --     (useContextMenuCascade
-            --         ( "Watchlist entry", watchlistEntry )
-            --         (useMenuEntryWithTextContaining "Orbit"
-            --             (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+            -- endDecisionPath
+            --     (actWithoutFurtherReadings
+            --         ( "Orbit entry in watchlist panel."
+            --         , EffectOnWindow.effectsForOrbit
+            --             { startLocation = { x = watchlistEntry.uiNode.totalDisplayRegion.x, y = watchlistEntry.uiNode.totalDisplayRegion.y}
+            --             , mouseButton = MouseButtonLeft
+            --             }
             --         )
-            --         context.readingFromGameClient
             --     )
+            describeBranch "Orbit entry in watchlist panel."
+                (useContextMenuCascade
+                    ( "Watchlist entry", watchlistEntry )
+                    (useMenuEntryWithTextContaining "Orbit"
+                        (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+                    )
+                    context.readingFromGameClient
+                )
 
         Nothing ->
             describeBranch "I see no entry in the watchlist panel. Warping directly to mining site."
