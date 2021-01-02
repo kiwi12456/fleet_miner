@@ -1534,7 +1534,7 @@ topmostAsteroidFromOverviewWindow =
     overviewWindowEntriesRepresentingAsteroids
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
         >> List.sortBy (.uiNode >> .totalDisplayRegion >> .y)
-        -- >> List.random
+        >> List.range 1 5
         >> List.head
 
 
