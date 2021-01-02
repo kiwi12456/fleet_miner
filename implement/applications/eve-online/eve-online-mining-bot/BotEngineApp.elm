@@ -733,15 +733,25 @@ approachFleetCommanderIfFarEnough context fleetCommanderOverviewEntry =
 
             else
                 Just
-                    (describeBranch "Far enough to start approaching fleet commander."
-                        (useContextMenuCascadeOnOverviewEntry
-                            (useMenuEntryWithTextContaining "Orbit" 
-                                (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+                    (endDecisionPath
+                        (actWithoutFurtherReadings
+                            ( "Far enough to start approaching fleet commander."
+                            , EffectOnWindow.effectsForOrbit
+                                { startLocation = { x = fleetCommanderOverviewEntry.uiNode.totalDisplayRegion.x, y = fleetCommanderOverviewEntry.uiNode.totalDisplayRegion.y}
+                                , mouseButton = MouseButtonLeft
+                                }
                             )
-                            fleetCommanderOverviewEntry
-                            context.readingFromGameClient
                         )
                     )
+                    -- (describeBranch "Far enough to start approaching fleet commander."
+                    --     (useContextMenuCascadeOnOverviewEntry
+                    --         (useMenuEntryWithTextContaining "Orbit" 
+                    --             (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+                    --         )
+                    --         fleetCommanderOverviewEntry
+                    --         context.readingFromGameClient
+                    --     )
+                    -- )
 
         Err error ->
             Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)
@@ -1041,14 +1051,23 @@ orbitWatchlistEntry : BotDecisionContext -> DecisionPathNode
 orbitWatchlistEntry context =
     case context.readingFromGameClient.watchListPanel |> Maybe.andThen (.entries >> List.head) of
         Just watchlistEntry ->
-            describeBranch "Orbit entry in watchlist panel."
-                (useContextMenuCascade
-                    ( "Watchlist entry", watchlistEntry )
-                    (useMenuEntryWithTextContaining "Orbit"
-                        (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+            endDecisionPath
+                (actWithoutFurtherReadings
+                    ( "Orbit entry in watchlist panel."
+                    , EffectOnWindow.effectsForOrbit
+                        { startLocation = { x = watchlistEntry.uiNode.totalDisplayRegion.x, y = watchlistEntry.uiNode.totalDisplayRegion.y}
+                        , mouseButton = MouseButtonLeft
+                        }
                     )
-                    context.readingFromGameClient
                 )
+            -- describeBranch "Orbit entry in watchlist panel."
+            --     (useContextMenuCascade
+            --         ( "Watchlist entry", watchlistEntry )
+            --         (useMenuEntryWithTextContaining "Orbit"
+            --             (useMenuEntryWithTextContaining "500 m" menuCascadeCompleted)
+            --         )
+            --         context.readingFromGameClient
+            --     )
 
         Nothing ->
             describeBranch "I see no entry in the watchlist panel. Warping directly to mining site."
