@@ -1017,7 +1017,7 @@ dockToStationOrStructureUsingSurroundingsButtonMenu { prioritizeStructures, desc
 
 warpToFleetCommander : BotDecisionContext -> DecisionPathNode
 warpToFleetCommander context =
-    case context.readingFromGameClient.fleetWindow |> Maybe.andThen (.fleetMembers >> List.head) of
+    case context.readingFromGameClient.fleetBroadcast |> Maybe.andThen (.fleetBroadcast >> List.head) of
         Just fleetDestination ->
             case fleetDestination.uiNode |> getAllContainedDisplayTexts |> List.head of
                 Nothing ->
