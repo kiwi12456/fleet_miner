@@ -839,12 +839,22 @@ lockTargetFromOverviewEntryAndEnsureIsInRange readingFromGameClient rangeInMeter
 
 lockTargetFromOverviewEntry : OverviewWindowEntry -> ReadingFromGameClient -> DecisionPathNode
 lockTargetFromOverviewEntry overviewEntry readingFromGameClient =
-    describeBranch ("Lock target from overview entry '" ++ (overviewEntry.objectName |> Maybe.withDefault "") ++ "'")
-        (useContextMenuCascadeOnOverviewEntry
-            (useMenuEntryWithTextEqual "Lock target" menuCascadeCompleted)
-            overviewEntry
-            readingFromGameClient
-        )
+    -- describeBranch ("Lock target from overview entry '" ++ (overviewEntry.objectName |> Maybe.withDefault "") ++ "'")
+        endDecisionPath
+            (actWithoutFurtherReadings
+                ( "Lock target from overview entry '" ++ (overviewEntry.objectName |> Maybe.withDefault "") ++ "'"
+                , EffectOnWindow.effectsForLockTarget
+                    { startLocation = overviewEntry.totalDisplayRegion |> centerFromDisplayRegion
+                    , mouseButton = MouseButtonLeft
+                    }
+                )
+            )
+        
+        -- (useContextMenuCascadeOnOverviewEntry
+        --     (useMenuEntryWithTextEqual "Lock target" menuCascadeCompleted)
+        --     overviewEntry
+        --     readingFromGameClient
+        -- )
 
 
 dockToStationOrStructureWithMatchingName :

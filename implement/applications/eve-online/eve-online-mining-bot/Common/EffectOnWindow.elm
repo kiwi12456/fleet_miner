@@ -87,6 +87,22 @@ effectsForDragAndDrop { startLocation, mouseButton, endLocation } =
     , KeyUp (vkey_I)
     ]
 
+effectsForLockTarget : { startLocation : Location2d, mouseButton : MouseButton } -> List EffectOnWindowStructure
+effectsForLockTarget { startLocation, mouseButton } =
+    [ MouseMoveTo startLocation
+    , KeyDown (vkey_LCONTROL)
+    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (vkey_LCONTROL)
+    , KeyDown (vkey_LCONTROL)
+    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (vkey_LCONTROL)
+    , KeyDown (vkey_LCONTROL)
+    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    , KeyUp (vkey_LCONTROL)
+    ]
 
 virtualKeyCodeFromMouseButton : MouseButton -> VirtualKeyCode
 virtualKeyCodeFromMouseButton mouseButton =
