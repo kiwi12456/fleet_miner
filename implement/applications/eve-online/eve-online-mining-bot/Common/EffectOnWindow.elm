@@ -94,14 +94,14 @@ effectsForLockTarget { startLocation, mouseButton } =
     , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
     , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
     , KeyUp (vkey_LCONTROL)
-    , KeyDown (vkey_LCONTROL)
-    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
-    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
-    , KeyUp (vkey_LCONTROL)
-    , KeyDown (vkey_LCONTROL)
-    , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
-    , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
-    , KeyUp (vkey_LCONTROL)
+    -- , KeyDown (vkey_LCONTROL)
+    -- , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    -- , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    -- , KeyUp (vkey_LCONTROL)
+    -- , KeyDown (vkey_LCONTROL)
+    -- , KeyDown (virtualKeyCodeFromMouseButton mouseButton)
+    -- , KeyUp (virtualKeyCodeFromMouseButton mouseButton)
+    -- , KeyUp (vkey_LCONTROL)
     ]
 
 virtualKeyCodeFromMouseButton : MouseButton -> VirtualKeyCode
