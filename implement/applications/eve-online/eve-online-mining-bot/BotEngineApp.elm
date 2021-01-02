@@ -486,28 +486,33 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                 |> Maybe.withDefault
                                                                     (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> List.head ) of
                                                                         Just targetAssigned ->
-                                                                            describeBranch "Found targets assigned" waitForProgressInGame
+                                                                            describeBranch "Found targets assigned"
+                                                                                (case (targetAssigned.assignedIcons |> List.head) of
+                                                                                        Nothing ->
+                                                                                            endDecisionPath
+                                                                                                (actWithoutFurtherReadings
+                                                                                                    ( "Target assigned but not being mined. Trigger F1, F2 and mining drones."
+                                                                                                    , [ 
+                                                                                                        [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F1]
+                                                                                                    , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F1 ]
+                                                                                                    , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F2 ]
+                                                                                                    , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F2 ]
+                                                                                                    , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F ]
+                                                                                                    , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F ]
+                                                                                                    ]
+                                                                                                        |> List.concat
+                                                                                                    )
+                                                                                                )
+
+                                                                                        Just targetAssignedIcon ->
+                                                                                            describeBranch "Target already being mined."
+                                                                                                (processLockedTargets context)
+
+                                                                                )
                                                                         Nothing ->
-                                                                            describeBranch "Found no targets." waitForProgressInGame
+                                                                            describeBranch "Found no targets."
+                                                                                (processLockedTargets context)
                                                                     )
-
-
-                                                                    -- (describeBranch "I see a locked target."
-                                                                    --     (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
-                                                                    --         Nothing ->
-                                                                    --             describeBranch "All known mining modules are active."
-                                                                    --                 (readShipUIModuleButtonTooltips context
-                                                                    --                     |> Maybe.withDefault
-                                                                    --                         (launchDronesAndSendThemToMine context.readingFromGameClient
-                                                                    --                             |> Maybe.withDefault waitForProgressInGame
-                                                                    --                         )
-                                                                    --                 )
-
-                                                                    --         Just inactiveModule ->
-                                                                    --             describeBranch "I see an inactive mining module. Activate it."
-                                                                    --                 (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
-                                                                    --     )
-                                                                    -- )
                                                     )
 
                                             Just itemInInventory ->
@@ -567,22 +572,7 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                                 -}
                                                                                 unlockTargetsNotForMining context
                                                                                     |> Maybe.withDefault
-                                                                                        (describeBranch "I see a locked target."
-                                                                                            (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
-                                                                                                Nothing ->
-                                                                                                    describeBranch "All known mining modules are active."
-                                                                                                        (readShipUIModuleButtonTooltips context
-                                                                                                            |> Maybe.withDefault
-                                                                                                                (launchDronesAndSendThemToMine context.readingFromGameClient
-                                                                                                                    |> Maybe.withDefault waitForProgressInGame
-                                                                                                                )
-                                                                                                        )
-
-                                                                                                Just inactiveModule ->
-                                                                                                    describeBranch "I see an inactive mining module. Activate it."
-                                                                                                        (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
-                                                                                            )
-                                                                                        )
+                                                                                        (processLockedTargets context)
                                                                         )
                                                                 )
                                                                     
@@ -639,26 +629,6 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                         describeBranch "Found no targets."
                                                                             (processLockedTargets context)
                                                                 )
-
-
-                                                        -- unlockTargetsNotForMining context
-                                                        --     |> Maybe.withDefault
-                                                        --         (describeBranch "I see a locked target."
-                                                        --             (case context |> knownMiningModules |> List.filter (.isActive >> Maybe.withDefault False >> not) |> List.head of
-                                                        --                 Nothing ->
-                                                        --                     describeBranch "All known mining modules are active."
-                                                        --                         (readShipUIModuleButtonTooltips context
-                                                        --                             |> Maybe.withDefault
-                                                        --                                 (launchDronesAndSendThemToMine context.readingFromGameClient
-                                                        --                                     |> Maybe.withDefault waitForProgressInGame
-                                                        --                                 )
-                                                        --                         )
-
-                                                        --                 Just inactiveModule ->
-                                                        --                     describeBranch "I see an inactive mining module. Activate it."
-                                                        --                         (clickModuleButtonButWaitIfClickedInPreviousStep context inactiveModule)
-                                                        --             )
-                                                        --         )
                                                 )
 
 
