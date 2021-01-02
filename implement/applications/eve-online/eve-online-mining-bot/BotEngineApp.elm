@@ -1533,8 +1533,8 @@ topmostAsteroidFromOverviewWindow : ReadingFromGameClient -> Maybe OverviewWindo
 topmostAsteroidFromOverviewWindow =
     overviewWindowEntriesRepresentingAsteroids
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
-        >> List.take 3
         >> List.sortBy (.uiNode >> .totalDisplayRegion >> .y)
+        >> List.take 3
         >> List.reverse
         >> List.head
 
