@@ -844,7 +844,7 @@ lockTargetFromOverviewEntry overviewEntry readingFromGameClient =
             (actWithoutFurtherReadings
                 ( "Lock target from overview entry '" ++ (overviewEntry.objectName |> Maybe.withDefault "") ++ "'"
                 , EffectOnWindow.effectsForLockTarget
-                    { startLocation = overviewEntry
+                    { startLocation = { x: overviewEntry.x, y: overviewEntry.y}
                     , mouseButton = MouseButtonLeft
                     }
                 )
