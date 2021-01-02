@@ -485,7 +485,7 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                             unlockTargetsNotForMining context
                                                                 |> Maybe.withDefault
                                                                     
-                                                                        case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> Maybe.andThen List.head) of
+                                                                        (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> Maybe.andThen List.head) of
                                                                             Just targetAssigned ->
                                                                                 case (targetAssigned .assignedIcons |> Maybe.andThen List.head) of
                                                                                     Nothing ->
