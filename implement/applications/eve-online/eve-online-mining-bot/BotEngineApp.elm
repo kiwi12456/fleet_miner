@@ -20,6 +20,7 @@ import Common.Basics exposing (listElementAtWrappedIndex)
 import Common.DecisionTree exposing (describeBranch, endDecisionPath)
 import Common.EffectOnWindow as EffectOnWindow exposing (MouseButton(..))
 import Dict
+import Random
 import EveOnline.AppFramework
     exposing
         ( AppEffect(..)
@@ -1533,6 +1534,7 @@ topmostAsteroidFromOverviewWindow =
     overviewWindowEntriesRepresentingAsteroids
         >> List.filter overviewWindowEntryRepresentsAnAsteroid
         >> List.sortBy (.uiNode >> .totalDisplayRegion >> .y)
+        >> List.random
         >> List.head
 
 
