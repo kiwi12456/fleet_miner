@@ -1171,13 +1171,23 @@ launchDronesAndSendThemToMine readingFromGameClient =
                         in
                         if 0 < (idlingDrones |> List.length) then
                             Just
-                                (describeBranch "Send idling drone(s)"
-                                    (useContextMenuCascade
-                                        ( "drones group", droneGroupInLocalSpace.header.uiNode )
-                                        (useMenuEntryWithTextContaining "mine" menuCascadeCompleted)
-                                        readingFromGameClient
+                                (endDecisionPath
+                                    (actWithoutFurtherReadings
+                                        ( "Send idling drone(s) to mine ore."
+                                        , [ [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F ]
+                                        , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F ]
+                                        ]
+                                            |> List.concat
+                                        )
                                     )
                                 )
+                                -- (describeBranch "Send idling drone(s)"
+                                --     (useContextMenuCascade
+                                --         ( "drones group", droneGroupInLocalSpace.header.uiNode )
+                                --         (useMenuEntryWithTextContaining "mine" menuCascadeCompleted)
+                                --         readingFromGameClient
+                                --     )
+                                -- )
 
                         else if 0 < dronesInBayQuantity && dronesInLocalSpaceQuantity < 5 then
                             Just
