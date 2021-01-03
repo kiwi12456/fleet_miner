@@ -602,55 +602,61 @@ inSpaceWithOreHoldSelectedExecute context seeUndockingComplete inventoryWindowWi
                                                                             --     Just (describeBranch ("Failed to read the distance: " ++ error) askForHelpToGetUnstuck)                   
                                                                     
                                                     Nothing ->
-                                                        if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
-                                                            describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
-                                                                (returnDronesToBay context.readingFromGameClient
-                                                                    |> Maybe.withDefault (unloadToFleetCommander context)
-                                                                )
+                                                        case context.readingFromGameClient |> fleetCommanderFromOverviewWindow of
+                                                            Nothing ->
+                                                                describeBranch "Fleet commander not found in overview window. Warp to fleet commander."
+                                                                    (warpToFleetCommander context)
 
-                                                        else
-                                                            describeBranch ("The ore hold is not yet filled " ++ describeThresholdToUnload ++ ". Get more ore.")
-                                                                (case context.readingFromGameClient.targets |> List.head of
-                                                                    Nothing ->
-                                                                        describeBranch "I see no locked target."
-                                                                            (travelToMiningSiteAndLaunchDronesAndTargetAsteroid context)
+                                                            Just fleetCommanderInOverview ->
+                                                                if context.eventContext.appSettings.oreHoldMaxPercent <= fillPercent then
+                                                                    describeBranch ("The ore hold is filled at least " ++ describeThresholdToUnload ++ ". Unload the ore.")
+                                                                        (returnDronesToBay context.readingFromGameClient
+                                                                            |> Maybe.withDefault (unloadToFleetCommander context)
+                                                                        )
 
-                                                                    Just _ ->
-                                                                        {- Depending on the UI configuration, the game client might automatically target rats.
-                                                                        To avoid these targets interfering with mining, unlock them here.
-                                                                        -}
-                                                                        unlockTargetsNotForMining context
-                                                                            |> Maybe.withDefault
-                                                                                (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> List.head ) of
-                                                                                    Just targetAssigned ->
-                                                                                        describeBranch "Found targets assigned"
-                                                                                            (case (targetAssigned.assignedIcons |> List.head) of
-                                                                                                    Nothing ->
-                                                                                                        endDecisionPath
-                                                                                                            (actWithoutFurtherReadings
-                                                                                                                ( "Target assigned but not being mined. Trigger F1, F2 and mining drones."
-                                                                                                                , [ 
-                                                                                                                    [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F1]
-                                                                                                                , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F1 ]
-                                                                                                                , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F2 ]
-                                                                                                                , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F2 ]
-                                                                                                                , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F ]
-                                                                                                                , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F ]
-                                                                                                                ]
-                                                                                                                    |> List.concat
-                                                                                                                )
-                                                                                                            )
+                                                                else
+                                                                    describeBranch ("The ore hold is not yet filled " ++ describeThresholdToUnload ++ ". Get more ore.")
+                                                                        (case context.readingFromGameClient.targets |> List.head of
+                                                                            Nothing ->
+                                                                                describeBranch "I see no locked target."
+                                                                                    (travelToMiningSiteAndLaunchDronesAndTargetAsteroid context)
 
-                                                                                                    Just targetAssignedIcon ->
-                                                                                                        describeBranch "Target already being mined."
-                                                                                                            (processLockedTargets context)
+                                                                            Just _ ->
+                                                                                {- Depending on the UI configuration, the game client might automatically target rats.
+                                                                                To avoid these targets interfering with mining, unlock them here.
+                                                                                -}
+                                                                                unlockTargetsNotForMining context
+                                                                                    |> Maybe.withDefault
+                                                                                        (case (context.readingFromGameClient.targets |> List.filter .isActiveTarget |> List.head ) of
+                                                                                            Just targetAssigned ->
+                                                                                                describeBranch "Found targets assigned"
+                                                                                                    (case (targetAssigned.assignedIcons |> List.head) of
+                                                                                                            Nothing ->
+                                                                                                                endDecisionPath
+                                                                                                                    (actWithoutFurtherReadings
+                                                                                                                        ( "Target assigned but not being mined. Trigger F1, F2 and mining drones."
+                                                                                                                        , [ 
+                                                                                                                            [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F1]
+                                                                                                                        , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F1 ]
+                                                                                                                        , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F2 ]
+                                                                                                                        , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F2 ]
+                                                                                                                        , [ EffectOnWindow.KeyDown EffectOnWindow.vkey_F ]
+                                                                                                                        , [ EffectOnWindow.KeyUp EffectOnWindow.vkey_F ]
+                                                                                                                        ]
+                                                                                                                            |> List.concat
+                                                                                                                        )
+                                                                                                                    )
 
-                                                                                            )
-                                                                                    Nothing ->
-                                                                                        describeBranch "Found no targets."
-                                                                                            (processLockedTargets context)
-                                                                                )
-                                                                )
+                                                                                                            Just targetAssignedIcon ->
+                                                                                                                describeBranch "Target already being mined."
+                                                                                                                    (processLockedTargets context)
+
+                                                                                                    )
+                                                                                            Nothing ->
+                                                                                                describeBranch "Found no targets."
+                                                                                                    (processLockedTargets context)
+                                                                                        )
+                                                                        )
 
 
 processLockedTargets : BotDecisionContext -> DecisionPathNode
